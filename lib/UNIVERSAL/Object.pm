@@ -76,7 +76,7 @@ sub SLOTS {
 
 sub DESTROY {
     my $self = $_[0];
-    $self->can('DEMOLISH') && UNIVERSAL::Object::__::DEMOLISHALL( $self )
+    $self->can('DEMOLISH') && UNIVERSAL::Object::__::DEMOLISHALL( $self );
     return;
 }
 
