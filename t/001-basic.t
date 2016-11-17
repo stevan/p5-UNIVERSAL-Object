@@ -9,12 +9,13 @@ BEGIN {
 	use_ok('UNIVERSAL::Object');
 }
 
-package Point {
+{
+    package Point;
 	use strict;
 	use warnings;
 
 	our @ISA = ('UNIVERSAL::Object');
-	our %HAS = ( 
+	our %HAS = (
 		x => sub { 0 },
 		y => sub { 0 },
 	);
@@ -25,14 +26,13 @@ package Point {
 	sub clear {
 		@{ $_[0] }{ qw[ x y ]} = (0 , 0)
 	}
-}
 
-package Point3D {
+    package Point3D;
 	use strict;
 	use warnings;
 
 	our @ISA = ('Point');
-	our %HAS = ( 
+	our %HAS = (
 		%Point::HAS,
 		z => sub { 0 },
 	);

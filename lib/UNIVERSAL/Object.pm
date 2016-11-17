@@ -93,84 +93,82 @@ UNIVERSAL::Object - A useful base class
 
     ## Point/Point3D Example
 
-    package Point 0.01 {
-        use strict;
-        use warnings;
+    package Point;
+    use strict;
+    use warnings;
 
-        our @ISA = ('UNIVERSAL::Object');
-        our %HAS = (
-            x => sub { 0 },
-            y => sub { 0 },
-        );
+    our @ISA = ('UNIVERSAL::Object');
+    our %HAS = (
+        x => sub { 0 },
+        y => sub { 0 },
+    );
 
-        sub x ($self) { $self->{x} }
-        sub y ($self) { $self->{y} }
+    sub x { $_[0]->{x} }
+    sub y { $_[0]->{y} }
 
-        sub clear ($self) {
-            @{ $self }{qw[ x y ]} = (0 , 0)
-        }
+    sub clear {
+        my ($self) = @_;
+        @{ $self }{qw[ x y ]} = (0 , 0)
     }
 
-    package Point3D 0.01 {
-        use strict;
-        use warnings;
+    package Point3D;
+    use strict;
+    use warnings;
 
-        our @ISA = ('Point');
-        our %HAS = (
-            %Point::HAS,
-            z => sub { 0 },
-        );
+    our @ISA = ('Point');
+    our %HAS = (
+        %Point::HAS, # inheritance
+        z => sub { 0 },
+    );
 
-        sub z ($self) { $self->{z} }
+    sub z { $_[0]->{z} }
 
-        sub clear ($self) {
-            $self->SUPER::clear;
-            $self->{z} = 0;
-        }
+    sub clear {
+        my ($self) = @_;
+        $self->SUPER::clear;
+        $self->{z} = 0;
     }
 
     ## Person/Employee Example
 
-    package Person {
-        use strict;
-        use warnings;
+    package Person;
+    use strict;
+    use warnings;
 
-        our @ISA = ('UNIVERSAL::Object');
-        our %HAS = (
+    our @ISA = ('UNIVERSAL::Object');
+    our %HAS = (
 
-            ## Required
-            # this attribute is required because if
-            # it is not supplied, the initialiser below
-            # will run, which will die
-            name   => sub { die 'name is required' },
+        ## Required
+        # this attribute is required because if
+        # it is not supplied, the initialiser below
+        # will run, which will die
+        name   => sub { die 'name is required' },
 
-            ## Optional w/ Default
-            # this attribute has a default value
-            age    => sub { 0 },
+        ## Optional w/ Default
+        # this attribute has a default value
+        age    => sub { 0 },
 
-            ## Optional w/out Default
-            # this attribute has no defualt value
-            # and is not required, however we need
-            # to still have an empty sub since we
-            # use that sub to locate the "home" package
-            # of a given attribute (useful when
-            # attributes are inherited or composed in
-            # via roles)
-            gender => sub {},
-        );
-    }
+        ## Optional w/out Default
+        # this attribute has no defualt value
+        # and is not required, however we need
+        # to still have an empty sub since we
+        # use that sub to locate the "home" package
+        # of a given attribute (useful when
+        # attributes are inherited or composed in
+        # via roles)
+        gender => sub {},
+    );
 
-    package Employee {
-        use strict;
-        use warnings;
+    package Employee;
+    use strict;
+    use warnings;
 
-        our @ISA = ('Person');
-        our %HAS = (
-            %Person::HAS, # inheritance ;)
-            job_title => sub { die 'job_title is required' },
-            manager   => sub {},
-        );
-    }
+    our @ISA = ('Person');
+    our %HAS = (
+        %Person::HAS, # inheritance ;)
+        job_title => sub { die 'job_title is required' },
+        manager   => sub {},
+    );
 
 =head1 DESCRIPTION
 
