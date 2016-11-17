@@ -6,8 +6,6 @@ use warnings;
 our $VERSION   = '0.01';
 our $AUTHORITY = 'cpan:STEVAN';
 
-use Scalar::Util ();
-
 BEGIN {
     eval('use ' . ($] >= 5.010 ? 'mro' : 'MRO::Compat'));
     die $@ if $@;
@@ -15,7 +13,7 @@ BEGIN {
 
 sub new {
     my $class = shift;
-       $class = Scalar::Util::blessed( $class ) if ref $class;
+       $class = ref $class if ref $class;
     my $proto = $class->BUILDARGS( @_ );
     my $self  = $class->CREATE( $proto );
     if ( $self->can('BUILD') ) {
@@ -44,6 +42,7 @@ sub BUILDARGS {
 
 sub SLOTS {
     my $class = $_[0];
+       $class = ref $class if ref $class;
     no strict   'refs'; 
     no warnings 'once'; 
     return \%{$class . '::HAS'};
@@ -51,6 +50,7 @@ sub SLOTS {
 
 sub CREATE {
     my $class = $_[0];
+       $class = ref $class if ref $class;
     my $proto = $_[1];
 
     die '[ARGS] You must specify an instance prototype as a HASH ref'
@@ -62,7 +62,7 @@ sub CREATE {
     $self->{ $_ } = exists $proto->{ $_ }
         ? $proto->{ $_ }
         : $slots->{ $_ }->( $self, $proto )
-            foreach keys %$slots;
+            foreach keys %slots;
 
     return bless $self => $class;
 }
@@ -84,5 +84,51 @@ sub DESTROY {
 __END__
 
 =pod
+
+=head1 NAME
+
+UNIVERSAL::Object - A useful base class
+
+=head1 SYNOPSIS
+
+    package Point 0.01 {
+        use strict;
+        use warnings;
+
+        our @ISA = ('UNIVERSAL::Object');
+        our %HAS = ( 
+            x => sub { 0 },
+            y => sub { 0 },
+        );
+
+        sub x ($self) { $self->{x} }
+        sub y ($self) { $self->{y} }
+
+        sub clear ($self) {
+            @{ $self }{qw[ x y ]} = (0 , 0)
+        }
+    }
+
+    package Point3D 0.01 {
+        use strict;
+        use warnings;
+
+        our @ISA = ('Point');
+        our %HAS = ( 
+            %Point::HAS,
+            z => sub { 0 },
+        );
+
+        sub z ($self) { $self->{z} }
+
+        sub clear ($self) {
+            $self->SUPER::clear;
+            $self->{z} = 0;
+        }
+    }
+
+=head1 DESCRIPTION
+
+
 
 =cut
