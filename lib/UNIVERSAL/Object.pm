@@ -1,4 +1,5 @@
 package UNIVERSAL::Object;
+# ABSTRACT: A useful base class
 
 use strict;
 use warnings;
