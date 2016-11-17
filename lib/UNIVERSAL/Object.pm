@@ -43,8 +43,8 @@ sub BUILDARGS {
 sub SLOTS {
     my $class = $_[0];
        $class = ref $class if ref $class;
-    no strict   'refs'; 
-    no warnings 'once'; 
+    no strict   'refs';
+    no warnings 'once';
     return \%{$class . '::HAS'};
 }
 
@@ -96,7 +96,7 @@ UNIVERSAL::Object - A useful base class
         use warnings;
 
         our @ISA = ('UNIVERSAL::Object');
-        our %HAS = ( 
+        our %HAS = (
             x => sub { 0 },
             y => sub { 0 },
         );
@@ -114,7 +114,7 @@ UNIVERSAL::Object - A useful base class
         use warnings;
 
         our @ISA = ('Point');
-        our %HAS = ( 
+        our %HAS = (
             %Point::HAS,
             z => sub { 0 },
         );
