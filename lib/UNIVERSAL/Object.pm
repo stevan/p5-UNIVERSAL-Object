@@ -46,7 +46,7 @@ sub SLOTS {
        $class = ref $class if ref $class;
     no strict   'refs';
     no warnings 'once';
-    return \%{$class . '::HAS'};
+    return %{$class . '::HAS'};
 }
 
 sub CREATE {
@@ -58,12 +58,12 @@ sub CREATE {
         unless $proto && ref $proto eq 'HASH';
 
     my $self  = {};
-    my $slots = $class->SLOTS;
+    my %slots = $class->SLOTS;
 
     $self->{ $_ } = exists $proto->{ $_ }
         ? $proto->{ $_ }
-        : $slots->{ $_ }->( $self, $proto )
-            foreach keys %$slots;
+        : $slots{ $_ }->( $self, $proto )
+            foreach keys %slots;
 
     return bless $self => $class;
 }
