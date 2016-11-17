@@ -16,14 +16,8 @@ sub new {
     my $class = shift;
        $class = ref $class if ref $class;
     my $proto = $class->BUILDARGS( @_ );
-    my $self  = $class->CREATE( $proto );
-    if ( $self->can('BUILD') ) {
-        foreach my $super ( reverse @{ mro::get_linear_isa( $class ) } ) {
-            my $fully_qualified_name = $super . '::BUILD';
-            $self->$fully_qualified_name( $proto )
-                if defined &{ $fully_qualified_name };
-        }
-    }
+    my $self  = $class->BLESS( $proto );
+    $self->can('BUILD') && UNIVERSAL::Object::__::BUILDALL( $self, $proto );
     return $self;
 }
 
@@ -41,12 +35,16 @@ sub BUILDARGS {
     }
 }
 
-sub SLOTS {
+sub BLESS {
     my $class = $_[0];
        $class = ref $class if ref $class;
-    no strict   'refs';
-    no warnings 'once';
-    return %{$class . '::HAS'};
+    my $proto = $_[1];
+
+    die '[ARGS] You must specify an instance prototype as a HASH ref'
+        unless $proto && ref $proto eq 'HASH';
+
+    my $self = $class->CREATE( $proto );
+    return bless $self => $class;
 }
 
 sub CREATE {
@@ -65,19 +63,41 @@ sub CREATE {
         : $slots{ $_ }->( $self, $proto )
             foreach keys %slots;
 
-    return bless $self => $class;
+    return $self;
+}
+
+sub SLOTS {
+    my $class = $_[0];
+       $class = ref $class if ref $class;
+    no strict   'refs';
+    no warnings 'once';
+    return %{$class . '::HAS'};
 }
 
 sub DESTROY {
     my $self = $_[0];
-    if ( $self->can('DEMOLISH') ) {
-        foreach my $super ( @{ mro::get_linear_isa( Scalar::Util::blessed( $self ) ) } ) {
-            my $fully_qualified_name = $super . '::DEMOLISH';
-            $self->$fully_qualified_name()
-                if defined &{ $fully_qualified_name };
-        }
-    }
+    $self->can('DEMOLISH') && UNIVERSAL::Object::__::DEMOLISHALL( $self )
     return;
+}
+
+## Utils
+
+sub UNIVERSAL::Object::__::BUILDALL {
+    my ($self, $proto) = @_;
+    foreach my $super ( reverse @{ mro::get_linear_isa( ref $self ) } ) {
+        my $fully_qualified_name = $super . '::BUILD';
+        $self->$fully_qualified_name( $proto )
+            if defined &{ $fully_qualified_name };
+    }
+}
+
+sub UNIVERSAL::Object::__::DEMOLISHALL {
+    my ($self) = @_;
+    foreach my $super ( @{ mro::get_linear_isa( ref $self ) } ) {
+        my $fully_qualified_name = $super . '::DEMOLISH';
+        $self->$fully_qualified_name()
+            if defined &{ $fully_qualified_name };
+    }
 }
 
 1;
@@ -189,17 +209,23 @@ C<@args> are passed into C<BUILDARGS>.
 This method takes the original C<@args> to the C<new> constructor
 and is expected to turn them into a canonical form, which is a
 HASH ref of name/value pairs. This form is considered a prototype
-candidate for the instance and is then passed to C<CREATE> and
+candidate for the instance and is then passed to C<BLESS> and
 should be a (shallow) copy of what was contained in C<@args>.
 
-=head2 C<CREATE ($class, $proto)>
+=head2 C<BLESS ($class, $proto)>
 
 This method receives the C<$proto> candidate from C<BUILDARGS> and
-constructs from it a blessed instance using the C<%HAS> hash in the
-C<$class>.
+constructs from it a blessed instance by first calling C<CREATE>
+to build an unblessed reference with, then blesses that instance.
 
 This newly blessed instance is then initialized by calling all the
 available C<BUILD> methods in the correct (reverse mro) order.
+
+=head2 C<CREATE ($class, $proto)>
+
+This method receives the C<$proto> candidate from C<BLESS> and
+constructs from it an unblessed instance using the C<%HAS> hash in
+the C<$class>.
 
 =head2 C<BUILD ($self, $proto)>
 
