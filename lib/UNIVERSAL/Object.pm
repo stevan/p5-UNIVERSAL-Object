@@ -17,7 +17,7 @@ sub new {
        $class = ref $class if ref $class;
     my $proto = $class->BUILDARGS( @_ );
     my $self  = $class->BLESS( $proto );
-    $self->can('BUILD') && UNIVERSAL::Object::__::BUILDALL( $self, $proto );
+    $self->can('BUILD') && UNIVERSAL::Object::Util::BUILDALL( $self, $proto );
     return $self;
 }
 
@@ -76,13 +76,13 @@ sub SLOTS {
 
 sub DESTROY {
     my $self = $_[0];
-    $self->can('DEMOLISH') && UNIVERSAL::Object::__::DEMOLISHALL( $self );
+    $self->can('DEMOLISH') && UNIVERSAL::Object::Util::DEMOLISHALL( $self );
     return;
 }
 
 ## Utils
 
-sub UNIVERSAL::Object::__::BUILDALL {
+sub UNIVERSAL::Object::Util::BUILDALL {
     my ($self, $proto) = @_;
     foreach my $super ( reverse @{ mro::get_linear_isa( ref $self ) } ) {
         my $fully_qualified_name = $super . '::BUILD';
@@ -91,7 +91,7 @@ sub UNIVERSAL::Object::__::BUILDALL {
     }
 }
 
-sub UNIVERSAL::Object::__::DEMOLISHALL {
+sub UNIVERSAL::Object::Util::DEMOLISHALL {
     my ($self) = @_;
     foreach my $super ( @{ mro::get_linear_isa( ref $self ) } ) {
         my $fully_qualified_name = $super . '::DEMOLISH';
