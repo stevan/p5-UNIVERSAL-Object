@@ -150,46 +150,6 @@ UNIVERSAL::Object - A useful base class
         $self->{z} = 0;
     }
 
-    ## Person/Employee Example
-
-    package Person;
-    use strict;
-    use warnings;
-
-    our @ISA = ('UNIVERSAL::Object');
-    our %HAS = (
-
-        ## Required
-        # this attribute is required because if
-        # it is not supplied, the initialiser below
-        # will run, which will die
-        name   => sub { die 'name is required' },
-
-        ## Optional w/ Default
-        # this attribute has a default value
-        age    => sub { 0 },
-
-        ## Optional w/out Default
-        # this attribute has no defualt value
-        # and is not required, however we need
-        # to still have an empty sub since we
-        # use that sub to locate the "home" package
-        # of a given attribute (useful when
-        # attributes are inherited or composed in
-        # via roles)
-        gender => sub {},
-    );
-
-    package Employee;
-    use strict;
-    use warnings;
-
-    our @ISA = ('Person');
-    our %HAS = (
-        %Person::HAS, # inheritance ;)
-        job_title => sub { die 'job_title is required' },
-        manager   => sub {},
-    );
 
 =head1 DESCRIPTION
 
