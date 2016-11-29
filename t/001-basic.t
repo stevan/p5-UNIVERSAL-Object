@@ -10,77 +10,118 @@ BEGIN {
 }
 
 {
-    package Point;
-	use strict;
-	use warnings;
+    package Person;
+    use strict;
+    use warnings;
 
-	our @ISA = ('UNIVERSAL::Object');
-	our %HAS = (
-		x => sub { 0 },
-		y => sub { 0 },
-	);
+    our @ISA = ('UNIVERSAL::Object');
+    our %HAS = (
+        name   => sub { die 'name is required' },
+        age    => sub { 0 },
+        gender => sub {},
+    );
 
-	sub x { $_[0]->{x} }
-	sub y { $_[0]->{y} }
+    sub name   { $_[0]->{name}   }
+    sub age    { $_[0]->{age}    }
+    sub gender { $_[0]->{gender} }
 
-	sub clear {
-		@{ $_[0] }{ qw[ x y ]} = (0 , 0)
-	}
+    package Employee;
+    use strict;
+    use warnings;
 
-    package Point3D;
-	use strict;
-	use warnings;
+    our @ISA = ('Person');
+    our %HAS = (
+        %Person::HAS, 
+        job_title => sub { die 'job_title is required' },
+        manager   => sub {},
+    );
 
-	our @ISA = ('Point');
-	our %HAS = (
-		%Point::HAS,
-		z => sub { 0 },
-	);
-
-	sub z { $_[0]->{z} }
-
-	sub clear {
-		$_[0]->SUPER::clear;
-		$_[0]->{z} = 0;
-	}
+    sub job_title { $_[0]->{job_title} }
+    sub manager   { $_[0]->{manager}   }
 }
 
-subtest '... testing Point::new' => sub {
+subtest '... testing Person::new' => sub {
 
-	my $p = Point->new;
-	isa_ok($p, 'Point');
+	my $p = Person->new(
+		name   => 'stevan',
+		age    => 43,
+		gender => 'm',
+	);
+	isa_ok($p, 'Person');
 	isa_ok($p, 'UNIVERSAL::Object');
 
-	is($p->x, 0, '... got the value we expected');
-	is($p->y, 0, '... got the value we expected');
-
-	$p->{x} = 100;
-	$p->{y} = 500;
-
-	is($p->x, 100, '... got the changed value we expected');
-	is($p->y, 500, '... got the changed value we expected');
+	is($p->name, 'stevan', '... got the value we expected');
+	is($p->age, 43, '... got the value we expected');
+	is($p->gender, 'm', '... got the value we expected');
 };
 
-subtest '... testing Point3D::new' => sub {
+subtest '... testing Person::new defaults' => sub {
 
-	my $p = Point3D->new;
-	isa_ok($p, 'Point');
-	isa_ok($p, 'Point3D');
+	my $p = Person->new(
+		name   => 'stevan',
+	);
+	isa_ok($p, 'Person');
 	isa_ok($p, 'UNIVERSAL::Object');
 
-	is($p->x, 0, '... got the value we expected');
-	is($p->y, 0, '... got the value we expected');
-	is($p->z, 0, '... got the value we expected');
-
-	$p->{x} = 100;
-	$p->{y} = 500;
-	$p->{z} = 250;
-
-	is($p->x, 100, '... got the changed value we expected');
-	is($p->y, 500, '... got the changed value we expected');
-	is($p->z, 250, '... got the changed value we expected');
+	is($p->name, 'stevan', '... got the value we expected');
+	is($p->age, 0, '... got the value we expected');
+	is($p->gender, undef, '... got the value we expected');
 };
 
+subtest '... testing Person::new errors' => sub {
+	eval { Person->new };
+	like($@, qr/^name is required/, '... got the expected error');
+};
+
+subtest '... testing Employee::new' => sub {
+
+	my $bob = Employee->new( 
+		name      => 'bob',
+		job_title => 'people-manager'
+	);
+
+	my $e = Employee->new(
+		name      => 'stevan',
+		age       => 43,
+		gender    => 'm',
+		job_title => 'developer',
+		manager   => $bob,
+	);
+	isa_ok($e, 'Employee');
+	isa_ok($e, 'Person');
+	isa_ok($e, 'UNIVERSAL::Object');
+
+	is($e->name, 'stevan', '... got the value we expected');
+	is($e->age, 43, '... got the value we expected');
+	is($e->gender, 'm', '... got the value we expected');
+	is($e->job_title, 'developer', '... got the value we expected');
+	is($e->manager, $bob, '... got the value we expected');
+};
+
+subtest '... testing Employee::new defaults' => sub {
+
+	my $e = Employee->new(
+		name      => 'stevan',
+		job_title => 'developer'
+	);
+	isa_ok($e, 'Employee');
+	isa_ok($e, 'Person');
+	isa_ok($e, 'UNIVERSAL::Object');
+
+	is($e->name, 'stevan', '... got the value we expected');
+	is($e->age, 0, '... got the value we expected');
+	is($e->gender, undef, '... got the value we expected');
+	is($e->job_title, 'developer', '... got the value we expected');
+	is($e->manager, undef, '... got the value we expected');
+};
+
+subtest '... testing Employee::new errors' => sub {
+	eval { Employee->new( job_title => 'developer' ) };
+	like($@, qr/^name is required/, '... got the expected error');
+
+	eval { Employee->new( name => 'stevan' ) };
+	like($@, qr/^job_title is required/, '... got the expected error');
+};
 
 
 done_testing;
