@@ -100,43 +100,34 @@ UNIVERSAL::Object - A useful base class
 
 =head1 SYNOPSIS
 
-    ## Point/Point3D Example
-
-    package Point;
+    package Person;
     use strict;
     use warnings;
 
     our @ISA = ('UNIVERSAL::Object');
     our %HAS = (
-        x => sub { 0 },
-        y => sub { 0 },
+        name   => sub { die 'name is required' }, # required in constructor
+        age    => sub { 0 },                      # w/ default value
+        gender => sub {},                         # no default value
     );
 
-    sub x { $_[0]->{x} }
-    sub y { $_[0]->{y} }
+    sub name   { $_[0]->{name}   }
+    sub age    { $_[0]->{age}    }
+    sub gender { $_[0]->{gender} }
 
-    sub clear {
-        my ($self) = @_;
-        @{ $self }{qw[ x y ]} = (0 , 0)
-    }
-
-    package Point3D;
+    package Employee;
     use strict;
     use warnings;
 
-    our @ISA = ('Point');
+    our @ISA = ('Person');
     our %HAS = (
-        %Point::HAS, # inheritance
-        z => sub { 0 },
+        %Person::HAS, # inheritance :)
+        job_title => sub { die 'job_title is required' },
+        manager   => sub {},
     );
 
-    sub z { $_[0]->{z} }
-
-    sub clear {
-        my ($self) = @_;
-        $self->SUPER::clear;
-        $self->{z} = 0;
-    }
+    sub job_title { $_[0]->{job_title} }
+    sub manager   { $_[0]->{manager}   }
 
 
 =head1 DESCRIPTION
@@ -157,23 +148,17 @@ C<@args> are passed into C<BUILDARGS>.
 This method takes the original C<@args> to the C<new> constructor
 and is expected to turn them into a canonical form, which is a
 HASH ref of name/value pairs. This form is considered a prototype
-candidate for the instance and is then passed to C<BLESS> and
+candidate for the instance and is then passed to C<CREATE> and
 should be a (shallow) copy of what was contained in C<@args>.
-
-=head2 C<BLESS ($class, $proto)>
-
-This method receives the C<$proto> candidate from C<BUILDARGS> and
-constructs from it a blessed instance by first calling C<CREATE>
-to build an unblessed reference with, then blesses that instance.
-
-This newly blessed instance is then initialized by calling all the
-available C<BUILD> methods in the correct (reverse mro) order.
 
 =head2 C<CREATE ($class, $proto)>
 
-This method receives the C<$proto> candidate from C<BLESS> and
+This method receives the C<$proto> candidate from C<BUILDARGS> and
 constructs from it an unblessed instance using the C<%HAS> hash in
-the C<$class>.
+the C<$class>, then blesses that instance.
+
+This newly blessed instance is then initialized by calling all the
+available C<BUILD> methods in the correct (reverse mro) order.
 
 =head2 C<BUILD ($self, $proto)>
 
