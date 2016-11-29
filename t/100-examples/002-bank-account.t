@@ -4,7 +4,6 @@ use strict;
 use warnings;
 
 use Test::More;
-use Data::Dumper;
 
 BEGIN {
     use_ok('UNIVERSAL::Object');
@@ -97,22 +96,6 @@ subtest '... testing the BankAccount class' => sub {
         is $checking->balance, 0, '... got the checking balance we expected';
         is $savings->balance, 200, '... got the savings balance we expected';
     };
-};
-
-subtest '... testing some meta-information' => sub {
-
-    is_deeply(
-        mro::get_linear_isa('BankAccount'),
-        [ 'BankAccount', 'UNIVERSAL::Object' ],
-        '... got the expected linear isa'
-    );
-
-    is_deeply(
-        mro::get_linear_isa('CheckingAccount'),
-        [ 'CheckingAccount', 'BankAccount', 'UNIVERSAL::Object' ],
-        '... got the expected linear isa'
-    );
-
 };
 
 done_testing;

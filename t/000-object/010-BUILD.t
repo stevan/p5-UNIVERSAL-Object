@@ -5,8 +5,6 @@ use warnings;
 
 use Test::More;
 
-use Scalar::Util qw[ reftype blessed ];
-
 BEGIN {
     use_ok('UNIVERSAL::Object');
 }
@@ -71,9 +69,6 @@ subtest '... simple BUILD test' => sub {
     isa_ok($foo, 'Foo');
     isa_ok($foo, 'UNIVERSAL::Object');
 
-    is(blessed $foo, 'Foo', '... got the expected class name');
-    is(reftype $foo, 'HASH', '... got the expected default repr type');
-
     is_deeply($foo->collector, ['Foo'], '... got the expected collection');
 
     subtest '... making sure BUILD creates new values' => sub {
@@ -87,9 +82,6 @@ subtest '... complex BUILD test' => sub {
     isa_ok($bar, 'Foo');
     isa_ok($bar, 'UNIVERSAL::Object');
 
-    is(blessed $bar, 'Bar', '... got the expected class name');
-    is(reftype $bar, 'HASH', '... got the expected default repr type');
-
     is_deeply($bar->collector, ['Foo', 'Bar'], '... got the expected collection');
 
     subtest '... making sure BUILD creates new values' => sub {
@@ -102,9 +94,6 @@ subtest '... more complex BUILD test' => sub {
     isa_ok($baz, 'Bar');
     isa_ok($baz, 'Foo');
     isa_ok($baz, 'UNIVERSAL::Object');
-
-    is(blessed $baz, 'Baz', '... got the expected class name');
-    is(reftype $baz, 'HASH', '... got the expected default repr type');
 
     is_deeply($baz->collector, ['Foo', 'Bar', 'Baz'], '... got the expected collection');
 

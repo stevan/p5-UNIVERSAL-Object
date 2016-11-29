@@ -4,7 +4,6 @@ use strict;
 use warnings;
 
 use Test::More;
-use Test::Fatal;
 
 BEGIN {
     use_ok('UNIVERSAL::Object');
@@ -22,7 +21,10 @@ subtest '... calling ->new on instance' => sub {
     isa_ok($o, 'UNIVERSAL::Object');
 
     my $o2;
-    is(exception { $o2 = $o->new }, undef, '... no expection calling ->new on instance');
+
+    $@ = undef;
+    eval { $o2 = $o->new };
+    ok(!$@, '... no expection calling ->new on instance');
     isnt($o, $o2, '... we got a new instance');
 };
 
@@ -70,14 +72,18 @@ subtest '... all the BUILDARGS' => sub {
 
 subtest '... funkier BUILDARGS' => sub {
 
+    $@ = undef;
+    eval { UNIVERSAL::Object->new([]) };
     like(
-        exception { UNIVERSAL::Object->new([]) },
+        $@,
         qr/^\[ARGS\] expected a HASH reference but got a ARRAY\(0x.*\)/,
         '... error case when incorrect type of args is passed in'
     );
 
+    $@ = undef;
+    eval { UNIVERSAL::Object->new(10) };
     like(
-        exception { UNIVERSAL::Object->new(10) },
+        $@,
         qr/^\[ARGS\] expected an even sized list reference but instead got 1 element\(s\)/,
         '... error case when incorrect number of args is passed in'
     );

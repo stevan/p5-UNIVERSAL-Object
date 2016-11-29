@@ -5,8 +5,6 @@ use warnings;
 
 use Test::More;
 
-use Scalar::Util qw[ reftype blessed ];
-
 BEGIN {
     use_ok('UNIVERSAL::Object');
 }
@@ -64,9 +62,6 @@ subtest '... simple BUILDARGS test w/out inheritance' => sub {
     isa_ok($o, 'Foo::NoInheritance');
     isa_ok($o, 'UNIVERSAL::Object');
 
-    is(blessed $o, 'Foo::NoInheritance', '... got the expected class name');
-    is(reftype $o, 'HASH', '... got the expected default repr type');
-
     ok(exists $o->{foo}, '... got the expected slot');
     is($o->{foo}, 'BAR', '... the expected slot has the expected value');
 };
@@ -76,9 +71,6 @@ subtest '... simple BUILDARGS test w/ inheritance and next::method' => sub {
     isa_ok($o, 'Foo::WithInheritance::NextMethod');
     isa_ok($o, 'UNIVERSAL::Object');
 
-    is(blessed $o, 'Foo::WithInheritance::NextMethod', '... got the expected class name');
-    is(reftype $o, 'HASH', '... got the expected default repr type');
-
     ok(exists $o->{foo}, '... got the expected slot');
     is($o->{foo}, 'BAR', '... the expected slot has the expected value');
 };
@@ -87,9 +79,6 @@ subtest '... simple BUILDARGS test w/ inheritance and SUPER' => sub {
     my $o = Foo::WithInheritance::SUPER->new( 'BAR' );
     isa_ok($o, 'Foo::WithInheritance::SUPER');
     isa_ok($o, 'UNIVERSAL::Object');
-
-    is(blessed $o, 'Foo::WithInheritance::SUPER', '... got the expected class name');
-    is(reftype $o, 'HASH', '... got the expected default repr type');
 
     ok(exists $o->{foo}, '... got the expected slot');
     is($o->{foo}, 'BAR', '... the expected slot has the expected value');

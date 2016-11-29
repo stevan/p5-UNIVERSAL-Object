@@ -94,10 +94,6 @@ __END__
 
 =pod
 
-=head1 NAME
-
-UNIVERSAL::Object - A useful base class
-
 =head1 SYNOPSIS
 
     package Person;
@@ -135,8 +131,6 @@ UNIVERSAL::Object - A useful base class
 This module provides a protocol for object construction and
 destruction that aims to be as simple as possible while still
 being complete.
-
-=head1 METHODS
 
 =head2 C<new ($class, @args)>
 
