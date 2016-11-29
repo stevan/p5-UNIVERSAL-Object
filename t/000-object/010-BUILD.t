@@ -65,31 +65,31 @@ my $foo = Foo->new;
 my $bar = Bar->new;
 my $baz = Baz->new;
 
-subtest '... simple BUILD test' => sub {
+{
     isa_ok($foo, 'Foo');
     isa_ok($foo, 'UNIVERSAL::Object');
 
     is_deeply($foo->collector, ['Foo'], '... got the expected collection');
 
-    subtest '... making sure BUILD creates new values' => sub {
+    {
         my $foo2 = Foo->new;
         isnt( $foo->collector, $foo2->collector, '... we have two different array refs' );
-    };
-};
+    }
+}
 
-subtest '... complex BUILD test' => sub {
+{
     isa_ok($bar, 'Bar');
     isa_ok($bar, 'Foo');
     isa_ok($bar, 'UNIVERSAL::Object');
 
     is_deeply($bar->collector, ['Foo', 'Bar'], '... got the expected collection');
 
-    subtest '... making sure BUILD creates new values' => sub {
+    {
         isnt( $foo->collector, $bar->collector, '... we have two different array refs' );
-    };
-};
+    }
+}
 
-subtest '... more complex BUILD test' => sub {
+{
     isa_ok($baz, 'Baz');
     isa_ok($baz, 'Bar');
     isa_ok($baz, 'Foo');
@@ -97,10 +97,10 @@ subtest '... more complex BUILD test' => sub {
 
     is_deeply($baz->collector, ['Foo', 'Bar', 'Baz'], '... got the expected collection');
 
-    subtest '... making sure BUILD creates new values' => sub {
+    {
         isnt( $foo->collector, $baz->collector, '... we have two different array refs' );
         isnt( $bar->collector, $baz->collector, '... we have two different array refs' );
-    };
-};
+    }
+}
 
 done_testing;

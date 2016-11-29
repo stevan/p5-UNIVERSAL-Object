@@ -86,7 +86,7 @@ TODO:
 }
 
 ## Test an instance
-subtest '... test an instance of Point' => sub {
+{
     my $p = Point->new;
     isa_ok($p, 'Point');
 
@@ -106,10 +106,10 @@ subtest '... test an instance of Point' => sub {
     is $p->y, 320, '... got the right value for y';
 
     is_deeply $p->pack, { x => 10, y => 320 }, '... got the right value from pack';
-};
+}
 
 ## Test the instance
-subtest '... test an instance of Point3D' => sub {
+{
     my $p3d = Point3D->new();
     isa_ok($p3d, 'Point3D');
     isa_ok($p3d, 'Point');
@@ -132,7 +132,7 @@ subtest '... test an instance of Point3D' => sub {
     is $p3d->z, 30, '... got the right value for z';
 
     is_deeply $p3d->pack, { x => 10, y => 320, z => 30 }, '... got the right value from pack';
-};
+}
 
 done_testing;
 

@@ -40,7 +40,7 @@ BEGIN {
     sub manager   { $_[0]->{manager}   }
 }
 
-subtest '... testing Person::new' => sub {
+{
 
 	my $p = Person->new(
 		name   => 'stevan',
@@ -53,9 +53,9 @@ subtest '... testing Person::new' => sub {
 	is($p->name, 'stevan', '... got the value we expected');
 	is($p->age, 43, '... got the value we expected');
 	is($p->gender, 'm', '... got the value we expected');
-};
+}
 
-subtest '... testing Person::new defaults' => sub {
+{
 
 	my $p = Person->new(
 		name   => 'stevan',
@@ -66,14 +66,14 @@ subtest '... testing Person::new defaults' => sub {
 	is($p->name, 'stevan', '... got the value we expected');
 	is($p->age, 0, '... got the value we expected');
 	is($p->gender, undef, '... got the value we expected');
-};
+}
 
-subtest '... testing Person::new errors' => sub {
+{
 	eval { Person->new };
 	like($@, qr/^name is required/, '... got the expected error');
-};
+}
 
-subtest '... testing Employee::new' => sub {
+{
 
 	my $bob = Employee->new( 
 		name      => 'bob',
@@ -96,9 +96,9 @@ subtest '... testing Employee::new' => sub {
 	is($e->gender, 'm', '... got the value we expected');
 	is($e->job_title, 'developer', '... got the value we expected');
 	is($e->manager, $bob, '... got the value we expected');
-};
+}
 
-subtest '... testing Employee::new defaults' => sub {
+{
 
 	my $e = Employee->new(
 		name      => 'stevan',
@@ -113,17 +113,14 @@ subtest '... testing Employee::new defaults' => sub {
 	is($e->gender, undef, '... got the value we expected');
 	is($e->job_title, 'developer', '... got the value we expected');
 	is($e->manager, undef, '... got the value we expected');
-};
+}
 
-subtest '... testing Employee::new errors' => sub {
+{
 	eval { Employee->new( job_title => 'developer' ) };
 	like($@, qr/^name is required/, '... got the expected error');
 
 	eval { Employee->new( name => 'stevan' ) };
 	like($@, qr/^job_title is required/, '... got the expected error');
-};
-
+}
 
 done_testing;
-
-1;

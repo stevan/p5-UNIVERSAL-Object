@@ -15,6 +15,9 @@ This test just confirms the expected behavior
 of next::method and that nothing we did altered
 it.
 
+This test relies on the fact we load MRO::Compat
+in the case we are pre v5.10.
+
 =cut
 
 {

@@ -62,7 +62,7 @@ TODO:
     }
 }
 
-subtest '... testing the BankAccount class' => sub {
+{
     my $savings = BankAccount->new( balance => 250 );
     isa_ok($savings, 'BankAccount' );
 
@@ -74,7 +74,7 @@ subtest '... testing the BankAccount class' => sub {
     $savings->deposit( 150 );
     is $savings->balance, 350, '... got the savings balance we expected';
 
-    subtest '... testing the CheckingAccount class' => sub {
+    {
 
         my $checking = CheckingAccount->new(
             overdraft_account => $savings,
@@ -95,8 +95,8 @@ subtest '... testing the BankAccount class' => sub {
         $checking->withdraw( 200 );
         is $checking->balance, 0, '... got the checking balance we expected';
         is $savings->balance, 200, '... got the savings balance we expected';
-    };
-};
+    }
+}
 
 done_testing;
 

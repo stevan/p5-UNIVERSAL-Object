@@ -10,5 +10,3 @@ BEGIN {
 }
 
 done_testing;
-
-1;

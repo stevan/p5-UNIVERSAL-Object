@@ -53,19 +53,19 @@ my $COLLECTOR;
     }
 }
 
-subtest '... simple DEMOLISH test' => sub {
+{
     $COLLECTOR = [];
     Foo->new;
     is_deeply($COLLECTOR, ['Foo'], '... got the expected collection');
-};
+}
 
-subtest '... complex DEMOLISH test' => sub {
+{
     $COLLECTOR = [];
     Bar->new;
     is_deeply($COLLECTOR, ['Bar', 'Foo'], '... got the expected collection');
-};
+}
 
-subtest '... more complex DEMOLISH test' => sub {
+{
     $COLLECTOR = [];
     Baz->new;
     is_deeply($COLLECTOR, ['Baz', 'Bar', 'Foo'], '... got the expected collection');

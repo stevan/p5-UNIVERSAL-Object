@@ -15,7 +15,7 @@ TODO:
 
 =cut
 
-subtest '... calling ->new on instance' => sub {
+{
 
     my $o = UNIVERSAL::Object->new;
     isa_ok($o, 'UNIVERSAL::Object');
@@ -26,7 +26,7 @@ subtest '... calling ->new on instance' => sub {
     eval { $o2 = $o->new };
     ok(!$@, '... no expection calling ->new on instance');
     isnt($o, $o2, '... we got a new instance');
-};
+}
 
 {
     package Foo;
@@ -45,7 +45,7 @@ subtest '... calling ->new on instance' => sub {
     sub test2 { $_[0]->{test2} }
 }
 
-subtest '... all the BUILDARGS' => sub {
+{
 
     foreach my $foo ( Foo->new, Foo->new({}) ) {
         isa_ok($foo, 'Foo');
@@ -68,9 +68,9 @@ subtest '... all the BUILDARGS' => sub {
         is($foo->test2, 20, '... got value now');
     }
 
-};
+}
 
-subtest '... funkier BUILDARGS' => sub {
+{
 
     $@ = undef;
     eval { UNIVERSAL::Object->new([]) };
@@ -88,6 +88,6 @@ subtest '... funkier BUILDARGS' => sub {
         '... error case when incorrect number of args is passed in'
     );
 
-};
+}
 
 done_testing;

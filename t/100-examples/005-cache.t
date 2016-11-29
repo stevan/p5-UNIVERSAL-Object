@@ -59,26 +59,28 @@ my @data = qw[
     three
 ];
 
-my $c = Cache->new( fetcher => sub { shift @data } );
-isa_ok($c, 'Cache');
+{
+    my $c = Cache->new( fetcher => sub { shift @data } );
+    isa_ok($c, 'Cache');
 
-is($c->data, 'one', '... the data we got is correct');
-ok($c->has_data, '... we have data');
+    is($c->data, 'one', '... the data we got is correct');
+    ok($c->has_data, '... we have data');
 
-$c->clear;
+    $c->clear;
 
-is($c->data, 'two', '... the data we got is correct (cache has been cleared)');
-is($c->data, 'two', '... the data is still the same');
-ok($c->has_data, '... we have data');
+    is($c->data, 'two', '... the data we got is correct (cache has been cleared)');
+    is($c->data, 'two', '... the data is still the same');
+    ok($c->has_data, '... we have data');
 
-$c->clear;
+    $c->clear;
 
-is($c->data, 'three', '... the data we got is correct (cache has been cleared)');
-ok($c->has_data, '... we have data');
+    is($c->data, 'three', '... the data we got is correct (cache has been cleared)');
+    ok($c->has_data, '... we have data');
 
-$c->clear;
+    $c->clear;
 
-ok(!$c->has_data, '... we no longer have data');
-is($c->data, undef, '... the cache is empty now');
+    ok(!$c->has_data, '... we no longer have data');
+    is($c->data, undef, '... the cache is empty now');
+}
 
 done_testing;
