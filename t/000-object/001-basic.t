@@ -3,7 +3,7 @@
 use strict;
 use warnings;
 
-use Test::More;
+use Test::More qw[no_plan];
 
 BEGIN {
     use_ok('UNIVERSAL::Object');
@@ -53,4 +53,4 @@ TODO:
     is($o->{foo}, 'FOO', '... the expected slot has the expected value');
 }
 
-done_testing;
+

@@ -3,7 +3,7 @@
 use strict;
 use warnings;
 
-use Test::More;
+use Test::More qw[no_plan];
 
 BEGIN {
     use_ok('UNIVERSAL::Object');
@@ -68,4 +68,4 @@ my $method = $foo->baz;
 is(ref $method, 'CODE', '... got back a code ref');
 is($method->($foo), 'BAZ', '... got the method we expected');
 
-done_testing;
+

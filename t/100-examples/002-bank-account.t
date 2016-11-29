@@ -3,7 +3,7 @@
 use strict;
 use warnings;
 
-use Test::More;
+use Test::More qw[no_plan];
 
 BEGIN {
     use_ok('UNIVERSAL::Object');
@@ -98,6 +98,6 @@ TODO:
     }
 }
 
-done_testing;
+
 
 

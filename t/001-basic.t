@@ -3,7 +3,7 @@
 use strict;
 use warnings;
 
-use Test::More;
+use Test::More qw[no_plan];
 
 BEGIN {
 	use_ok('UNIVERSAL::Object');
@@ -123,4 +123,4 @@ BEGIN {
 	like($@, qr/^job_title is required/, '... got the expected error');
 }
 
-done_testing;
+

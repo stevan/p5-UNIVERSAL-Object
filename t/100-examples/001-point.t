@@ -3,7 +3,7 @@
 use strict;
 use warnings;
 
-use Test::More;
+use Test::More qw[no_plan];
 
 BEGIN {
     use_ok('UNIVERSAL::Object');
@@ -134,6 +134,6 @@ TODO:
     is_deeply $p3d->pack, { x => 10, y => 320, z => 30 }, '... got the right value from pack';
 }
 
-done_testing;
+
 
 

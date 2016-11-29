@@ -3,7 +3,7 @@
 use strict;
 use warnings;
 
-use Test::More;
+use Test::More qw[no_plan];
 
 BEGIN {
     use_ok('UNIVERSAL::Object');
@@ -83,4 +83,4 @@ my @data = qw[
     is($c->data, undef, '... the cache is empty now');
 }
 
-done_testing;
+

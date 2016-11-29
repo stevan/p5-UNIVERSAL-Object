@@ -3,7 +3,7 @@
 use strict;
 use warnings;
 
-use Test::More;
+use Test::More qw[no_plan];
 
 BEGIN {
     use_ok('UNIVERSAL::Object');
@@ -58,4 +58,4 @@ BEGIN {
     is($c->count, 0, '... count is 0 again');
 }
 
-done_testing;
+

@@ -3,7 +3,7 @@
 use strict;
 use warnings;
 
-use Test::More;
+use Test::More qw[no_plan];
 
 BEGIN {
     use_ok('UNIVERSAL::Object');
@@ -153,4 +153,4 @@ BEGIN {
     is($ll->sum, 49, '... things sum correctly');
 }
 
-done_testing;
+

@@ -3,7 +3,7 @@
 use strict;
 use warnings;
 
-use Test::More;
+use Test::More qw[no_plan];
 
 BEGIN {
     use_ok('UNIVERSAL::Object');
@@ -59,4 +59,4 @@ isa_ok($foo, 'UNIVERSAL::Object');
     is($foo->bar, 11, '... and the attribute assignment worked');
 }
 
-done_testing;
+

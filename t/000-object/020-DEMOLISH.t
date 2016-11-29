@@ -3,7 +3,7 @@
 use strict;
 use warnings;
 
-use Test::More;
+use Test::More qw[no_plan];
 
 BEGIN {
     use_ok('UNIVERSAL::Object');
@@ -71,4 +71,4 @@ my $COLLECTOR;
     is_deeply($COLLECTOR, ['Baz', 'Bar', 'Foo'], '... got the expected collection');
 };
 
-done_testing;
+
