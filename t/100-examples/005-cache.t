@@ -44,7 +44,10 @@ BEGIN {
 
     sub data {
         my $self = $_[0];
-        $self->{data} //= $self->_fetch_data;
+        # lazyily fetch data
+        $self->{data} = $self->_fetch_data 
+            unless defined $self->{data};
+        $self->{data}
     }
 
     sub has_data { defined $_[0]->{data} }

@@ -41,10 +41,10 @@ Make the parent a weak-ref ... it is not right now.
     sub parent     {         $_[0]->{parent} }
     sub has_parent { defined $_[0]->{parent} }
 
-    sub left     { $_[0]->{left} //= ref($_[0])->new( parent => $_[0] ) }
+    sub left     { $_[0]->{left} ||= ref($_[0])->new( parent => $_[0] ) }
     sub has_left { defined $_[0]->{left} }
 
-    sub right     { $_[0]->{right} //= ref($_[0])->new( parent => $_[0] ) }
+    sub right     { $_[0]->{right} ||= ref($_[0])->new( parent => $_[0] ) }
     sub has_right { defined $_[0]->{right} }
 }
 
