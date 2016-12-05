@@ -21,7 +21,7 @@ object that behaves like a simple CODE ref.
 =cut
 
 {
-    package My::Attr;
+    package My::Slot;
     use strict;
     use warnings;
 
@@ -45,7 +45,7 @@ object that behaves like a simple CODE ref.
 
     our @ISA = ('UNIVERSAL::Object');
     our %HAS = (
-        bar => My::Attr->new( default => sub { 'Foo::bar' } )
+        bar => My::Slot->new( default => sub { 'Foo::bar' } )
     );
 
     sub bar { $_[0]->{bar} }
