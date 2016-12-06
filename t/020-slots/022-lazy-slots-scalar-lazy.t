@@ -6,20 +6,20 @@ use warnings;
 use Test::More;
 
 BEGIN {
-    use_ok('UNIVERSAL::Object');
-
     plan skip_all => 'Scalar::Lazy is required for this test'
         unless eval 'use Scalar::Lazy;1;';
     plan 'no_plan';
+
+    use_ok('UNIVERSAL::Object');
 }
 
 =pod
 
 NOTE:
 Scalar::Lazy is also a possible candidate for
-the deferred values, it does not try to hide 
+the deferred values, it does not try to hide
 evidence of it's presence and is implemented
-with C<tie> so can be very slow. 
+with C<tie> so can be very slow.
 
 It also requires you to force the value
 in some cases, which (again) is not always
@@ -63,7 +63,7 @@ ideal.
 
     is($foo->baz, undef, '... got the expected value');
     $foo->{baz} = 'Foo::baz';
-    is($foo->bar, 'Foo::bar->Foo::baz', '... got the expected (lazy) value'); 
+    is($foo->bar, 'Foo::bar->Foo::baz', '... got the expected (lazy) value');
 }
 
 {

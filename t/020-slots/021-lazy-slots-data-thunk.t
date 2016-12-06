@@ -6,11 +6,11 @@ use warnings;
 use Test::More;
 
 BEGIN {
-    use_ok('UNIVERSAL::Object');
-
     plan skip_all => 'Data::Thunk is required for this test'
         unless eval 'use Data::Thunk;1;';
     plan 'no_plan';
+
+    use_ok('UNIVERSAL::Object');
 }
 
 =pod

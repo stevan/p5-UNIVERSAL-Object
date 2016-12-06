@@ -6,11 +6,11 @@ use warnings;
 use Test::More;
 
 BEGIN {
-    use_ok('UNIVERSAL::Object');
-
     plan skip_all => 'Scalar::Defer is required for this test'
         unless eval 'use Scalar::Defer;1;';
     plan 'no_plan';
+
+    use_ok('UNIVERSAL::Object');
 }
 
 =pod
