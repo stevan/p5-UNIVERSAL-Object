@@ -8,21 +8,22 @@ use Test::More;
 BEGIN {
     use_ok('UNIVERSAL::Object');
 
-    plan skip_all => 'Scalar::Defer is required for this test'
-        unless eval 'use Scalar::Defer;1;';
+    plan skip_all => 'Scalar::Lazy is required for this test'
+        unless eval 'use Scalar::Lazy;1;';
     plan 'no_plan';
 }
 
 =pod
 
 NOTE:
-Scalar::Defer is a workable candidate for
-the deferred values, however it leaves a
-lot of evidence of it's presence, so it
-might not be suitable for all usages.
+Scalar::Lazy is also a possible candidate for
+the deferred values, it does not try to hide 
+evidence of it's presence and is implemented
+with C<tie> so can be very slow. 
 
-Also, it requires you to force the value
-in some cases, which is not always ideal.
+It also requires you to force the value
+in some cases, which (again) is not always
+ideal.
 
 =cut
 
@@ -36,7 +37,7 @@ in some cases, which is not always ideal.
         baz => sub { undef },
         bar => sub {
             my ($self) = @_;
-            Scalar::Defer::lazy {
+            Scalar::Lazy::lazy {
                 $self->{baz}
                     ? 'Foo::bar->' . $self->{baz}
                     : undef
@@ -45,7 +46,7 @@ in some cases, which is not always ideal.
     );
 
     sub baz { $_[0]->{baz} }
-    sub bar { Scalar::Defer::force( $_[0]->{bar} ) }
+    sub bar { Scalar::Lazy::force( $_[0]->{bar} ) }
 }
 
 {
@@ -62,7 +63,7 @@ in some cases, which is not always ideal.
 
     is($foo->baz, undef, '... got the expected value');
     $foo->{baz} = 'Foo::baz';
-    is($foo->bar, 'Foo::bar->Foo::baz', '... got the expected (lazy) value');
+    is($foo->bar, 'Foo::bar->Foo::baz', '... got the expected (lazy) value'); 
 }
 
 {
