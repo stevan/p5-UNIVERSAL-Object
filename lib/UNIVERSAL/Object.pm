@@ -164,7 +164,6 @@ __END__
     sub job_title { $_[0]->{job_title} }
     sub manager   { $_[0]->{manager}   }
 
-
 =head1 DESCRIPTION
 
 This module provides a protocol for object construction and
@@ -213,5 +212,35 @@ by C<DESTROY>.
 
 The sole function of this method is to kick off the call to all the
 C<DEMOLISH> methods during destruction.
+
+=head1 MODERN SYNOPSIS
+
+    package Person {
+        use v5.24;
+        use warnings;
+
+        use parent 'UNIVERSAL::Object' => {
+            name   => sub { die 'name is required' }, # required in constructor
+            age    => sub { 0 },                      # w/ default value
+            gender => sub {},                         # no default value
+        };
+
+        sub name   ($self) { $self->{name}   }
+        sub age    ($self) { $self->{age}    }
+        sub gender ($self) { $self->{gender} }
+    }
+
+    package Employee {
+        use v5.24;
+        use warnings;
+
+        use parent 'Person' => {
+            job_title => sub { die 'job_title is required' },
+            manager   => sub {},
+        };
+
+        sub job_title ($self) { $self->{job_title} }
+        sub manager   ($self) { $self->{manager}   }
+    }
 
 =cut
