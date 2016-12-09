@@ -6,7 +6,7 @@ use warnings;
 use Test::More qw[no_plan];
 
 BEGIN {
-    use_ok('UNIVERSAL::Object');
+    use_ok('UNIVERSAL::Object', 'patch_parent');
 }
 
 {
