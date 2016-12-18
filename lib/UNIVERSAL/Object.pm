@@ -128,12 +128,12 @@ __END__
     # ...
 
     my $ceo = Employee->new(
-        name  => 'Bob',
+        name  => 'Alice',
         title => 'CEO',
     );
 
     my $manager = Employee->new(
-        name    => 'Bill',
+        name    => 'Bob',
         title   => 'Middle Manager',
         manager => $ceo,
     );
