@@ -1,4 +1,4 @@
-#!/usr/bin/env perl
+#!perl
 
 use strict;
 use warnings;
@@ -31,7 +31,7 @@ BEGIN {
 
     our @ISA = ('Person');
     our %HAS = (
-        %Person::HAS, 
+        %Person::HAS,
         job_title => sub { die 'job_title is required' },
         manager   => sub {},
     );
@@ -75,7 +75,7 @@ BEGIN {
 
 {
 
-	my $bob = Employee->new( 
+	my $bob = Employee->new(
 		name      => 'bob',
 		job_title => 'people-manager'
 	);
