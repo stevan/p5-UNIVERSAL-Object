@@ -164,43 +164,127 @@ __END__
     sub job_title { $_[0]->{job_title} }
     sub manager   { $_[0]->{manager}   }
 
+    # ...
+
+    my $ceo = Employee->new(
+        name  => 'Bob',
+        title => 'CEO',
+    );
+
+    my $manager = Employee->new(
+        name    => 'Bill',
+        title   => 'Middle Manager',
+        manager => $ceo,
+    );
+
+    my $pawn = Employee->new(
+        name    => 'Joe',
+        title   => 'Line Worker',
+        manager => $manager,
+    );
+
 =head1 DESCRIPTION
 
-This module provides a protocol for object construction and
-destruction that aims to be as simple as possible while still
-being complete.
+This is a simple base class that provides a protocol for object
+construction and destruction. It aims to be as simple as possible
+while still being complete.
+
+=head1 SLOT MANAGEMENT
+
+One of the key contributions of this module is to provide a
+mechanism for declaring the slots that a given class is expected
+to have. These are used in the object contruction process to ensure
+that all slots are created and initialized.
+
+=head2 C<%HAS>
+
+This is a public (C<our>) package variable that contains an entry
+for each slot expected in the instance. The key is the slot's name,
+while the value is a CODE reference which, when called, will produce
+a default value for the slot.
+
+B<NOTE:>
+No inheritance of slot definitions is done between classes, this is
+left as an exercise to the author, however it is easily accomplished
+with the pattern shown above in the L<SYNOPSIS>.
+
+=head2 C<SLOTS ($class)>
+
+This is an accessor method for the C<%HAS> variable in the C<$class>
+package.
+
+B<NOTE:>
+If you choose to store the slot definitions elsewhere (not in C<%HAS>)
+or store them in a different form (not C<< key => CODE >> hash
+entries), it is possible to then override this method to return the
+expected values in the expected form.
+
+=head1 CONSTRUCTION PROTOCOL
+
+Once we know the expected slots it is very easy to create a default
+constructor. This is the second key contribution of this module, to
+provide a consistent and complete protocol for the construction and
+destruction of instances.
+
+B<NOTE:>
+The method documentation is meant to be read from top to bottom,
+in that they are documented in the same order they are called.
 
 =head2 C<new ($class, @args)>
 
 This is the entry point for object construction, from here the
-C<@args> are passed into C<BUILDARGS>.
+C<@args> are passed into C<BUILDARGS>. The return value of C<new>
+should always be a fully constructed and initialized instance.
 
 =head2 C<BUILDARGS ($class, @args)>
 
 This method takes the original C<@args> to the C<new> constructor
 and is expected to turn them into a canonical form, which is a
 HASH ref of name/value pairs. This form is considered a prototype
-candidate for the instance and is then passed to C<CREATE> and
-should be a (shallow) copy of what was contained in C<@args>.
+candidate for the instance, and subseqently what C<CREATE> expects
+to receive.
+
+B<NOTE:>
+The values in the prototype candidate should be shallow copies of
+what was originally contained in C<@args>, but this is not actually
+enforced, just suggested to provide better ownership distinctions.
 
 =head2 C<CREATE ($class, $proto)>
 
 This method receives the C<$proto> candidate from C<BUILDARGS> and
-constructs from it an unblessed instance using the C<%HAS> hash in
-the C<$class>, then blesses that instance.
+constructs from it a blessed instance of the class.
 
-This newly blessed instance is then initialized by calling all the
-available C<BUILD> methods in the correct (reverse mro) order.
+First it must call C<SLOTS> (described above), then it will use the
+returned slot definitions along with the C<$proto> candidate to
+construct a complete blessed instance. It does this by looping
+through the list of slots, using values in the C<$proto> when
+available, otherwise using the slot initializers. The final blessed
+HASH ref based instance is then returned.
+
+B<NOTE:>
+If you wish to use a different instance type or some kind then this
+is the method you want to override.
 
 =head2 C<BUILD ($self, $proto)>
 
-This is an optional initialization method which recieves the blessed
-instance as well as the prototype candidate. There are no restirctions
-as to what this method can do other then just common sense.
+The newly blessed instance supplied by C<CREATE> must still be
+initialized. We do this by calling all the available C<BUILD> methods
+in the inheritance hierarchy in the correct (reverse mro) order.
 
+C<BUILD> is an optional initialization method which recieves the
+blessed instance as well as the prototype candidate. There are no
+restirctions as to what this method can do other then just common
+sense.
+
+B<NOTE:>
 It is worth noting that because we call all the C<BUILD> methods
-found in the object hierarchy, this return values of these methods
+found in the object hierarchy, the return values of these methods
 are completly ignored.
+
+=head1 DESTRUCTION PROTOCOL
+
+The last thing this module provides is an ordered destruction
+protocol for instances.
 
 =head2 C<DEMOLISH ($self)>
 
@@ -213,34 +297,8 @@ by C<DESTROY>.
 The sole function of this method is to kick off the call to all the
 C<DEMOLISH> methods during destruction.
 
-=head1 MODERN SYNOPSIS
-
-    package Person {
-        use v5.24;
-        use warnings;
-
-        use parent 'UNIVERSAL::Object' => {
-            name   => sub { die 'name is required' }, # required in constructor
-            age    => sub { 0 },                      # w/ default value
-            gender => sub {},                         # no default value
-        };
-
-        sub name   ($self) { $self->{name}   }
-        sub age    ($self) { $self->{age}    }
-        sub gender ($self) { $self->{gender} }
-    }
-
-    package Employee {
-        use v5.24;
-        use warnings;
-
-        use parent 'Person' => {
-            job_title => sub { die 'job_title is required' },
-            manager   => sub {},
-        };
-
-        sub job_title ($self) { $self->{job_title} }
-        sub manager   ($self) { $self->{manager}   }
-    }
-
 =cut
+
+
+
+
