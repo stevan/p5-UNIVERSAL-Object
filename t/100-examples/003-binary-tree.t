@@ -74,7 +74,8 @@ Make the parent a weak-ref ... it is not right now.
     #ok($parent_attr->is_data_in_slot_weak_for($t->right), '... the value is weakened');
 }
 
-package MyBinaryTree {
+{
+    package MyBinaryTree;
     use strict;
     use warnings;
 
