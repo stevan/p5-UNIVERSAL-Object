@@ -12,45 +12,6 @@ BEGIN {
     die $@ if $@;
 }
 
-# -----------------------------------------------
-# NOTE: 
-# -----------------------------------------------
-# THIS SHOULD DIE!!!
-# -----------------------------------------------
-# ... but that requires adding it to parent.pm 
-# which hopefully will not be contentious as it 
-# doesn't (fas as I can tell) have any 
-# back-compat implications.
-# - SL
-# -----------------------------------------------
-sub import {
-    if ( $_[1] && $_[1] eq 'patch_parent' ) {
-        require Sub::Uplevel;
-        require parent;
-        no warnings 'redefine';
-
-        my $old_import = \&parent::import;
-        *parent::import = sub {
-            my $inheritor = caller(0);
-
-            my $has; 
-            $has = pop @_ if ref $_[-1] eq 'HASH';
-
-            Sub::Uplevel::uplevel(1, $old_import, @_);
-
-            if ( $has ) {
-                no strict 'refs';
-                no warnings 'once';
-                %{"$inheritor\::HAS"} = (
-                    (map { %{"$_\::HAS"} } @_),
-                    %$has
-                );
-            }
-        };
-    }
-}
-# -----------------------------------------------
-
 sub new {
     my $class = shift;
        $class = ref $class if ref $class;
