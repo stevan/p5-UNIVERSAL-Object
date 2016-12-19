@@ -82,7 +82,8 @@ sub DESTROY {
 ## Utils
 
 sub UNIVERSAL::Object::Util::BUILDALL {
-    my ($self, $proto) = @_;
+    my $self  = $_[0];
+    my $proto = $_[1];
     foreach my $super ( reverse @{ mro::get_linear_isa( ref $self ) } ) {
         my $fully_qualified_name = $super . '::BUILD';
         $self->$fully_qualified_name( $proto )
@@ -91,7 +92,7 @@ sub UNIVERSAL::Object::Util::BUILDALL {
 }
 
 sub UNIVERSAL::Object::Util::DEMOLISHALL {
-    my ($self) = @_;
+    my $self = $_[0];
     foreach my $super ( @{ mro::get_linear_isa( ref $self ) } ) {
         my $fully_qualified_name = $super . '::DEMOLISH';
         $self->$fully_qualified_name()
