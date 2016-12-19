@@ -189,6 +189,10 @@ expected values in the expected form.
 This returns a new HASH reference to use as the instance.
 
 B<NOTE:>
+If you wish to use a different instance type of some kind then you
+will need to override this method.
+
+B<NOTE:>
 The HASH that gets returned from here will eventually be blessed,
 which means you are limited to C<tie> or XS C<MAGIC> based solutions
 if you want this HASH reference to behave differently.
@@ -228,16 +232,18 @@ enforced, just suggested to provide better ownership distinctions.
 This method receives the C<$proto> candidate from C<BUILDARGS> and
 constructs from it a blessed instance of the class.
 
-First it must call C<SLOTS> (described above), then it will use the
-returned slot definitions along with the C<$proto> candidate to
-construct a complete blessed instance. It does this by looping
-through the list of slots, using values in the C<$proto> when
-available, otherwise using the slot initializers. The final blessed
-HASH ref based instance is then returned.
+First it must call C<SLOTS> (described above), followed by C<REPR>
+(also described above) to get both the slot definitions and a newly
+minted HASH ref instance. Using these two things, along with the
+C<$proto> candidate, we construct a complete blessed instance.
+This is accomplished by looping through the list of slots, using
+values in the C<$proto> when available, otherwise using the slot
+initializers. The final blessed HASH ref based instance is then
+returned.
 
 B<NOTE:>
-If you wish to use a different instance type or some kind then this
-is the method you want to override.
+If you wish to use a different instance type of some kind then you
+will need to override this method.
 
 =head2 C<BUILD ($self, $proto)>
 
