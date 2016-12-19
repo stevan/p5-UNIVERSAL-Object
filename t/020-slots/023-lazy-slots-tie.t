@@ -51,9 +51,8 @@ into something real.
 
     our @ISA; BEGIN { @ISA = ('UNIVERSAL::Object') }
 
-    sub CREATE {
-        my $class = shift;
-        my $self  = $class->SUPER::CREATE( @_ );
+    sub REPR {
+        my $self  = {};
         tie %$self, 'UNIVERSAL::Object::Lazy::__INSTANCE__', $self;
         return $self;
     }

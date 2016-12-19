@@ -43,7 +43,7 @@ sub CREATE {
     die '[ARGS] You must specify an instance prototype as a HASH ref'
         unless $proto && ref $proto eq 'HASH';
 
-    my $self  = {};
+    my $self  = $class->REPR;
     my %slots = $class->SLOTS;
 
     $self->{ $_ } = exists $proto->{ $_ }
@@ -53,6 +53,8 @@ sub CREATE {
 
     return bless $self => $class;
 }
+
+sub REPR () { +{} }
 
 sub SLOTS {
     my $class = $_[0];
