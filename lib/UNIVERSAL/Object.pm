@@ -182,6 +182,17 @@ or store them in a different form (not C<< key => CODE >> hash
 entries), it is possible to then override this method to return the
 expected values in the expected form.
 
+=head1 INSTANCE REPRESENTATION
+
+=head2 C<REPR>
+
+This returns a new HASH reference to use as the instance.
+
+B<NOTE:>
+The HASH that gets returned from here will eventually be blessed,
+which means you are limited to C<tie> or XS C<MAGIC> based solutions
+if you want this HASH reference to behave differently.
+
 =head1 CONSTRUCTION PROTOCOL
 
 Once we know the expected slots it is very easy to create a default
