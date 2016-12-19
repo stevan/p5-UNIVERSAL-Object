@@ -65,13 +65,11 @@ BEGIN {
         baz => sub { undef },
         bar => sub {
             my ($self) = @_;
-            my $code = sub {
+            return sub : Lazy {
                 $self->{baz}
                     ? 'Foo::bar->' . $self->{baz}
                     : undef
             };
-            attributes::->import(__PACKAGE__, $code, 'Lazy');
-            return $code;
         },
 
     )};
