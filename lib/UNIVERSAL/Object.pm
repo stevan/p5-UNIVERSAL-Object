@@ -16,7 +16,7 @@ sub new {
     my $class = shift;
        $class = ref $class if ref $class;
     my $proto = $class->BUILDARGS( @_ );
-    my $self  = $class->CREATE( $proto );
+    my $self  = $class->BLESS( $class->REPR, $proto );
     $self->can('BUILD') && UNIVERSAL::Object::Util::BUILDALL( $self, $proto );
     return $self;
 }
@@ -35,15 +35,24 @@ sub BUILDARGS {
     }
 }
 
-sub CREATE {
+sub BLESS {
     my $class = $_[0];
        $class = ref $class if ref $class;
-    my $proto = $_[1];
+    my $self  = $_[1];
+    my $proto = $_[2];
 
     die '[ARGS] You must specify an instance prototype as a HASH ref'
         unless $proto && ref $proto eq 'HASH';
 
-    my $self  = $class->REPR;
+    return bless $class->CREATE( $self, $proto ) => $class;
+}
+
+sub CREATE {
+    my $class = $_[0];
+       $class = ref $class if ref $class;
+    my $self  = $_[1];
+    my $proto = $_[2];
+
     my %slots = $class->SLOTS;
 
     $self->{ $_ } = exists $proto->{ $_ }
@@ -51,7 +60,7 @@ sub CREATE {
         : $slots{ $_ }->( $self, $proto )
             foreach keys %slots;
 
-    return bless $self => $class;
+    return $self;
 }
 
 sub REPR () { +{} }
