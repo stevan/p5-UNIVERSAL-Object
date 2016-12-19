@@ -1,5 +1,8 @@
 Revision history for Perl extension UNIVERSAL::Object
 
+0.03
+    - ...
+
 0.02 2016-12-19
     - fixing an issue in a test, looks like if you call
       a package namespace `SUPER` it causes issues.
