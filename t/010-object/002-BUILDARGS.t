@@ -45,7 +45,7 @@ TODO:
         return $class->next::method( foo => $bar )
     }
 
-    package Foo::WithInheritance::SUPER;
+    package Foo::WithInheritance::SuperCall;
     use strict;
     use warnings;
     our @ISA; BEGIN { @ISA = ('UNIVERSAL::Object') };
@@ -76,8 +76,8 @@ TODO:
 }
 
 {
-    my $o = Foo::WithInheritance::SUPER->new( 'BAR' );
-    isa_ok($o, 'Foo::WithInheritance::SUPER');
+    my $o = Foo::WithInheritance::SuperCall->new( 'BAR' );
+    isa_ok($o, 'Foo::WithInheritance::SuperCall');
     isa_ok($o, 'UNIVERSAL::Object');
 
     ok(exists $o->{foo}, '... got the expected slot');
