@@ -3,15 +3,20 @@
 use strict;
 use warnings;
 
-use Test::More;
+use Test::More qw[no_plan];
 
 BEGIN {
-    plan 'no_plan';
-
     use_ok('UNIVERSAL::Object');
 }
 
 =pod
+
+NOTE:
+This version uses nothing outside of
+core and requires no special accessors,
+however it uses `tie` which is slow, but
+with some work this can perhaps be made
+into something real.
 
 =cut
 
