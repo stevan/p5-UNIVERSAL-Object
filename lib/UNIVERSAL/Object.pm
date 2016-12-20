@@ -16,7 +16,7 @@ sub new {
     my $class = shift;
        $class = ref $class if ref $class;
     my $proto = $class->BUILDARGS( @_ );
-    my $self  = $class->BLESS( $class->REPR, $proto );
+    my $self  = $class->BLESS( $proto );
     $self->can('BUILD') && UNIVERSAL::Object::Util::BUILDALL( $self, $proto );
     return $self;
 }
@@ -38,21 +38,20 @@ sub BUILDARGS {
 sub BLESS {
     my $class = $_[0];
        $class = ref $class if ref $class;
-    my $self  = $_[1];
-    my $proto = $_[2];
+    my $proto = $_[1];
 
     die '[ARGS] You must specify an instance prototype as a HASH ref'
         unless $proto && ref $proto eq 'HASH';
 
-    return bless $class->CREATE( $self, $proto ) => $class;
+    return bless $class->CREATE( $proto ) => $class;
 }
 
 sub CREATE {
     my $class = $_[0];
        $class = ref $class if ref $class;
-    my $self  = $_[1];
-    my $proto = $_[2];
+    my $proto = $_[1];
 
+    my $self  = $class->REPR;
     my %slots = $class->SLOTS;
 
     $self->{ $_ } = exists $proto->{ $_ }
@@ -229,18 +228,35 @@ should always be a fully constructed and initialized instance.
 This method takes the original C<@args> to the C<new> constructor
 and is expected to turn them into a canonical form, which is a
 HASH ref of name/value pairs. This form is considered a prototype
-candidate for the instance, and subseqently what C<CREATE> expects
-to receive.
+candidate for the instance, and what C<BLESS> and suseqently 
+C<CREATE> expect to receive.
 
 B<NOTE:>
 The values in the prototype candidate should be shallow copies of
 what was originally contained in C<@args>, but this is not actually
 enforced, just suggested to provide better ownership distinctions.
 
-=head2 C<CREATE ($class, $proto)>
+=head2 C<BLESS ($class, $proto)>
 
 This method receives the C<$proto> candidate from C<BUILDARGS> and
-constructs from it a blessed instance of the class.
+from it, ultimately constructs a blessed instance of the class.
+
+This method really has two responsibilities, first is to call 
+C<CREATE>, passing it the C<$proto> instance. Then it will take 
+the return value of C<CREATE> and C<bless> it into the C<$class>. 
+
+B<NOTE:>
+This method is mostly here to make it easier to override the 
+C<CREATE> method, which, along with the C<REPR> method, can be 
+used to change the behavior and/or type of the instance 
+structure. By keeping the C<bless> work here we make the work 
+done in C<CREATE> simpler with less mechanics. 
+
+=head2 C<CREATE ($class, $proto)>
+
+This method receives the C<$proto> candidate from C<BLESS> and
+return from it an unblessed instance structure that C<BLESS> will 
+then C<bless> into the C<$class>.
 
 First it must call C<SLOTS> (described above), followed by C<REPR>
 (also described above) to get both the slot definitions and a newly
@@ -248,7 +264,7 @@ minted HASH ref instance. Using these two things, along with the
 C<$proto> candidate, we construct a complete blessed instance.
 This is accomplished by looping through the list of slots, using
 values in the C<$proto> when available, otherwise using the slot
-initializers. The final blessed HASH ref based instance is then
+initializers. The final unblessed HASH ref based instance is then
 returned.
 
 B<NOTE:>
@@ -257,7 +273,7 @@ will need to override this method.
 
 =head2 C<BUILD ($self, $proto)>
 
-The newly blessed instance supplied by C<CREATE> must still be
+The newly blessed instance supplied by C<BLESS> must still be
 initialized. We do this by calling all the available C<BUILD> methods
 in the inheritance hierarchy in the correct (reverse mro) order.
 

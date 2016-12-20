@@ -34,7 +34,7 @@ TODO:
     sub CREATE {
         my ($class, $proto) = @_;
         $proto->{foo} = 'BAR';
-        $class->next::method( $proto );
+        return $class->next::method( $proto );
     }
 }
 

@@ -26,7 +26,8 @@ the base HASH instance type with a SCALAR ref instead.
     sub BUILDARGS { +{ arg => $_[1] } }
     sub REPR { \(my $x) }
     sub CREATE {
-        my ($class, $self, $proto) = @_;
+        my ($class, $proto) = @_;
+        my $self = $class->REPR;
         $$self = $proto->{arg};
         $self;
     }

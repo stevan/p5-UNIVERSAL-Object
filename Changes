@@ -1,7 +1,13 @@
 Revision history for Perl extension UNIVERSAL::Object
 
 0.03
-    - added the `REPR` method into the mix (see the docs)
+    - added a `REPR` method which returns the structure 
+      to be used as an instance
+      	- added docs and tests
+    - added a `BLESS` method which handles blessing and 
+      calling the `CREATE` method to construct the 
+      instance
+      	- added docs and tests
 
 0.02 2016-12-19
     - fixing an issue in a test, looks like if you call

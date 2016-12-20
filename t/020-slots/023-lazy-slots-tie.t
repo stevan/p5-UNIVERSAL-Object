@@ -27,7 +27,7 @@ into something real.
 
     use attributes ();
 
-    sub TIEHASH { bless { %{$_[1]} }, $_[0] }
+    sub TIEHASH { bless { %{$_[1]} }, $_[0] } 
     sub FETCH {
         my ($self, $key) = @_;
         $self->{$key} = $self->{$key}->()
