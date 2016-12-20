@@ -32,7 +32,7 @@ into something real.
         my ($self, $key) = @_;
         $self->{$key} = $self->{$key}->()
             if ref $self->{$key} eq 'CODE'
-            && scalar grep { $_ eq 'Lazy' } attributes::get( $self->{$key} );
+            && scalar grep { $_ eq 'lazy' } attributes::get( $self->{$key} );
         return $self->{$key};
     }
 
@@ -57,19 +57,34 @@ into something real.
         return $self;
     }
 
-    sub FETCH_CODE_ATTRIBUTES  { ('Lazy') }
+    # make sure to export the no warnings 'reserved'
+    # so that we can use the `lazy` attribute 
+    # (all lower case)
+    sub import { warnings->unimport('reserved') }
+
+    # set up the attribute
+    sub FETCH_CODE_ATTRIBUTES  { ('lazy') }
     sub MODIFY_CODE_ATTRIBUTES { () }
 
     package Foo;
     use strict;
     use warnings;
 
+    # NOTE: 
+    # really what we want to do is this:
+    #     C<use UNIVERSAL::Object::Lazy;>
+    # but given this is a test, we won't
+    # but just fake it with a manual call
+    # to import.
+    # - SL
+    BEGIN { UNIVERSAL::Object::Lazy->import }
+
     our @ISA; BEGIN { @ISA = ('UNIVERSAL::Object::Lazy') }
     our %HAS; BEGIN { %HAS = (
         baz => sub { undef },
         bar => sub {
             my ($self) = @_;
-            return sub : Lazy {
+            return sub : lazy {
                 $self->{baz}
                     ? 'Foo::bar->' . $self->{baz}
                     : undef
