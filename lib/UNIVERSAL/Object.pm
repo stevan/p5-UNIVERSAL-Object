@@ -172,7 +172,7 @@ that all slots are created and initialized.
 
 This is a public (C<our>) package variable that contains an entry
 for each slot expected in the instance. The key is the slot's name,
-while the value is a CODE reference which, when called, will produce
+while the value is a CODE reference which, when called, will produce
 a default value for the slot.
 
 B<NOTE:>
@@ -228,7 +228,7 @@ should always be a fully constructed and initialized instance.
 This method takes the original C<@args> to the C<new> constructor
 and is expected to turn them into a canonical form, which is a
 HASH ref of name/value pairs. This form is considered a prototype
-candidate for the instance, and what C<BLESS> and suseqently 
+candidate for the instance, and what C<BLESS> and suseqently
 C<CREATE> expect to receive.
 
 B<NOTE:>
@@ -241,21 +241,21 @@ enforced, just suggested to provide better ownership distinctions.
 This method receives the C<$proto> candidate from C<BUILDARGS> and
 from it, ultimately constructs a blessed instance of the class.
 
-This method really has two responsibilities, first is to call 
-C<CREATE>, passing it the C<$proto> instance. Then it will take 
-the return value of C<CREATE> and C<bless> it into the C<$class>. 
+This method really has two responsibilities, first is to call
+C<CREATE>, passing it the C<$proto> instance. Then it will take
+the return value of C<CREATE> and C<bless> it into the C<$class>.
 
 B<NOTE:>
-This method is mostly here to make it easier to override the 
-C<CREATE> method, which, along with the C<REPR> method, can be 
-used to change the behavior and/or type of the instance 
-structure. By keeping the C<bless> work here we make the work 
-done in C<CREATE> simpler with less mechanics. 
+This method is mostly here to make it easier to override the
+C<CREATE> method, which, along with the C<REPR> method, can be
+used to change the behavior and/or type of the instance
+structure. By keeping the C<bless> work here we make the work
+done in C<CREATE> simpler with less mechanics.
 
 =head2 C<CREATE ($class, $proto)>
 
 This method receives the C<$proto> candidate from C<BLESS> and
-return from it an unblessed instance structure that C<BLESS> will 
+return from it an unblessed instance structure that C<BLESS> will
 then C<bless> into the C<$class>.
 
 First it must call C<SLOTS> (described above), followed by C<REPR>
