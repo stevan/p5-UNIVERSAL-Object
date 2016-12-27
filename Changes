@@ -2,7 +2,7 @@ Revision history for Perl extension UNIVERSAL::Object
 
 0.04
     - only require MRO::Compat for perls before 5.10
-        - thanks to Dan Book for the fix
+        - thanks to Dan Book for the dist.ini fix
 
 0.03 2016-12-27
     - added a `REPR` method which returns the structure
