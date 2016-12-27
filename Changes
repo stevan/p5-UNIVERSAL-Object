@@ -1,5 +1,7 @@
 Revision history for Perl extension UNIVERSAL::Object
 
+0.04
+
 0.03 2016-12-27
     - added a `REPR` method which returns the structure
       to be used as an instance
