@@ -1,5 +1,9 @@
 Revision history for Perl extension UNIVERSAL::Object
 
+0.05
+    - switch to useing Carp::croak instead of die
+      it is and always has been in core.
+
 0.04 2016-12-29
     - only require MRO::Compat for perls before 5.10
         - thanks to Dan Book for the dist.ini fix

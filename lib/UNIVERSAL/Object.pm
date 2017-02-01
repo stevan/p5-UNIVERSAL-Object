@@ -4,12 +4,14 @@ package UNIVERSAL::Object;
 use strict;
 use warnings;
 
-our $VERSION   = '0.04';
+use Carp ();
+
+our $VERSION   = '0.05';
 our $AUTHORITY = 'cpan:STEVAN';
 
 BEGIN {
     eval('use ' . ($] >= 5.010 ? 'mro' : 'MRO::Compat'));
-    die $@ if $@;
+    Carp::croak($@) if $@;
 }
 
 sub new {
@@ -24,12 +26,12 @@ sub new {
 sub BUILDARGS {
     shift;
     if ( scalar @_ == 1 && ref $_[0] ) {
-        die '[ARGS] expected a HASH reference but got a ' . $_[0]
+        Carp::croak('[ARGS] expected a HASH reference but got a ' . $_[0])
             unless ref $_[0] eq 'HASH';
         return +{ %{ $_[0] } };
     }
     else {
-        die '[ARGS] expected an even sized list reference but instead got ' . (scalar @_) . ' element(s)'
+        Carp::croak('[ARGS] expected an even sized list reference but instead got ' . (scalar @_) . ' element(s)')
             unless ((scalar @_) % 2) == 0;
         return +{ @_ };
     }
@@ -40,7 +42,7 @@ sub BLESS {
        $class = ref $class if ref $class;
     my $proto = $_[1];
 
-    die '[ARGS] You must specify an instance prototype as a HASH ref'
+    Carp::croak('[ARGS] You must specify an instance prototype as a HASH ref')
         unless $proto && ref $proto eq 'HASH';
 
     return bless $class->CREATE( $proto ) => $class;
@@ -51,7 +53,7 @@ sub CREATE {
        $class = ref $class if ref $class;
     my $proto = $_[1];
 
-    my $self  = $class->REPR;
+    my $self  = $class->REPR( $proto );
     my %slots = $class->SLOTS;
 
     $self->{ $_ } = exists $proto->{ $_ }
