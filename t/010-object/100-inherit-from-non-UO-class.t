@@ -11,6 +11,9 @@ BEGIN {
 
 =pod
 
+Test inheriting from a class which also
+takes the same API for `new`.
+
 =cut
 
 {
@@ -27,7 +30,7 @@ BEGIN {
 }
 
 {
-    package Foo;
+    package Foo::Bar;
     use strict;
     use warnings;
     our @ISA; BEGIN { @ISA = ('UNIVERSAL::Object', 'Bar') };
@@ -42,8 +45,8 @@ BEGIN {
 }
 
 {
-    my $o = Foo->new;
-    isa_ok($o, 'Foo');
+    my $o = Foo::Bar->new;
+    isa_ok($o, 'Foo::Bar');
     isa_ok($o, 'UNIVERSAL::Object');
     isa_ok($o, 'Bar');
 
@@ -52,8 +55,8 @@ BEGIN {
 }
 
 {
-    my $o = Foo->new( foo => 'BAR' );
-    isa_ok($o, 'Foo');
+    my $o = Foo::Bar->new( foo => 'BAR' );
+    isa_ok($o, 'Foo::Bar');
     isa_ok($o, 'UNIVERSAL::Object');
     isa_ok($o, 'Bar');
 
@@ -62,8 +65,8 @@ BEGIN {
 }
 
 {
-    my $o = Foo->new( bar => 'BAZ' );
-    isa_ok($o, 'Foo');
+    my $o = Foo::Bar->new( bar => 'BAZ' );
+    isa_ok($o, 'Foo::Bar');
     isa_ok($o, 'UNIVERSAL::Object');
     isa_ok($o, 'Bar');
 
