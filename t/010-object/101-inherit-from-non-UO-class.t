@@ -40,16 +40,21 @@ old API as well.
 
     sub BUILDARGS {
         my $class = shift;
+        # look for the old API case ...
         if ( $_[0] && not(ref($_[0])) && scalar(@_) == 1 ) {
+            # and transform it ...
             return +{ baz => $_[0] };
         }
         else {
+            # otherwise, let the superclass handle it
             return $class->SUPER::BUILDARGS( @_ );
         }
     }
 
     sub REPR {
         my ($class, $proto) = @_;
+        # now feed the old constructor
+        # the expected API
         $class->Baz::new( $proto->{baz} );
     }
 
