@@ -1,10 +1,14 @@
 Revision history for Perl extension UNIVERSAL::Object
 
-0.05
-    - switch to useing Carp::croak instead of die
-      it is and always has been in core.
+0.05 2017-02-07
+    - the REPR method now takes the $proto which results
+      from BUILDARGS in case it needs to consult it in
+      the creation of the representation
+    - switch to using Carp::croak instead of die
+      it is, and always has been, in core.
     - added some tests to show how to inherit from
       classes which do not use UNIVERSAL::Object
+    - added new tests for non-HASH ref based instance
 
 0.04 2016-12-29
     - only require MRO::Compat for perls before 5.10
