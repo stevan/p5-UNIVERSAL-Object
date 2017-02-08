@@ -35,7 +35,7 @@ the base HASH instance type with an ARRAY ref instead.
         my ($class, $proto) = @_;
         my %slots = $class->SLOTS;
         my $self  = $class->REPR;
-        @$self    = map $proto->{$_} // $slots{$_}->(), sort keys %slots;
+        @$self    = map $proto->{$_} || $slots{$_}->(), sort keys %slots;
         return $self;
     }
 
@@ -53,4 +53,3 @@ the base HASH instance type with an ARRAY ref instead.
     );
 }
 
-done_testing;

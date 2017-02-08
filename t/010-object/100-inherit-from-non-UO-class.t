@@ -73,5 +73,3 @@ takes the same API for `new`.
     is($o->foo, 'FOO', '... the expected slot has the expected value');
     is($o->bar, 'BAZ', '... the expected slot has the expected value');
 }
-
-done_testing;

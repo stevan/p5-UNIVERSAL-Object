@@ -6,7 +6,7 @@ use warnings;
 
 use Carp ();
 
-our $VERSION   = '0.05';
+our $VERSION   = '0.06';
 our $AUTHORITY = 'cpan:STEVAN';
 
 BEGIN {

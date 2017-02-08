@@ -43,10 +43,12 @@ object that behaves like a simple CODE ref.
     use strict;
     use warnings;
 
-    our @ISA = ('UNIVERSAL::Object');
-    our %HAS = (
-        bar => My::Slot->new( default => sub { 'Foo::bar' } )
-    );
+    our @ISA; BEGIN { @ISA = ('UNIVERSAL::Object') }
+    our %HAS; BEGIN {
+        %HAS = (
+            bar => My::Slot->new( default => sub { 'Foo::bar' } )
+        )
+    };
 
     sub bar { $_[0]->{bar} }
 }

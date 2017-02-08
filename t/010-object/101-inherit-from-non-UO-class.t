@@ -102,4 +102,3 @@ old API as well.
     is($o->baz, 'GORCH', '... the expected slot has the expected value');
 }
 
-done_testing;
