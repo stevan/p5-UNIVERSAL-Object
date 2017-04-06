@@ -47,10 +47,55 @@ created. By placing and enforcing the guarantee of immutability,
 the users of our class no longer need to worry about a while class
 of problems that arise from mutable state.
 
-=head2 Immutability is viral
+=head2 Immutability is semi-viral
 
 Inheriting from an immutable class will make your subclass also
 immutable. This is by design.
+
+When an immutable instance references other data structures, they
+are not made immutable automatically. This too is by design.
+
+This means that given the following class:
+
+    package Person {
+        use strict;
+        use warnings;
+
+        our @ISA = ('UNIVERSAL::Object::Immutable');
+        our %HAS = (
+            given_names => sub { +[] },
+            family_name => sub {  '' },
+        );
+    }
+
+    package Employee {
+        use strict;
+        use warnings;
+
+        our @ISA = ('Person');
+        our %HAS = (
+            %Person::HAS,
+            job_title => sub { '' },
+        );
+    }
+
+Any of the following lines would cause an error about modification
+of a read-only value because we are trying to change the values
+inside the hashes or add new values.
+
+    my $e = Employee->new;
+    $e->{family_name} = 'little';
+    $e->{family_name} .= 'little';
+    $e->{given_names} = [ 'stevan', 'calvert' ];
+    $e->{job_title} = 'developer';
+    $e->{misspelled_key} = 0;
+
+However, the following would not cause an error because the C<ARRAY>
+reference stored in the C<given_names> slot is not itself read-only
+and so can be modified in this way.
+
+    my $e = Employee->new;
+    push @{ $e->{given_names} } => 'stevan', 'calvert';
 
 =head2 Immutability after the fact
 
