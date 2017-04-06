@@ -4,9 +4,11 @@ package UNIVERSAL::Object;
 use strict;
 use warnings;
 
+use 5.006;
+
 use Carp ();
 
-our $VERSION   = '0.06';
+our $VERSION   = '0.07';
 our $AUTHORITY = 'cpan:STEVAN';
 
 BEGIN {
@@ -304,6 +306,14 @@ by C<DESTROY>.
 
 The sole function of this method is to kick off the call to all the
 C<DEMOLISH> methods during destruction.
+
+=head1 SEE ALSO
+
+=over 4
+
+=item L<UNIVERSAL::Object::Immutable>
+
+=back
 
 =cut
 

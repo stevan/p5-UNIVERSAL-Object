@@ -23,5 +23,5 @@ BEGIN {
     }
 
     eval { This::Will::Not::Work->new };
-    like($@, qr/^Immutable objects must use a HASH ref REPR type\, not ARRAY/, '... got the expected error');
+    like($@, qr/^Immutable objects must use a HASH ref REPR type\, not This\:\:Will\:\:Not\:\:Work\=ARRAY\(0x/, '... got the expected error');
 }

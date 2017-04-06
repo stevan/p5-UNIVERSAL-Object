@@ -4,11 +4,13 @@ package UNIVERSAL::Object::Immutable;
 use strict;
 use warnings;
 
+use 5.008;
+
 use Carp       ();
 use Hash::Util ();
 use UNIVERSAL::Object;
 
-our $VERSION   = '0.06';
+our $VERSION   = '0.07';
 our $AUTHORITY = 'cpan:STEVAN';
 
 our @ISA; BEGIN { @ISA = ('UNIVERSAL::Object') }
@@ -16,8 +18,8 @@ our @ISA; BEGIN { @ISA = ('UNIVERSAL::Object') }
 sub BLESS {
     my $self = $_[0]->SUPER::BLESS( $_[1] );
 
-    Carp::croak('Immutable objects must use a HASH ref REPR type, not '.Scalar::Util::reftype($self))
-        unless Scalar::Util::reftype($self) eq 'HASH';
+    Carp::croak('Immutable objects must use a HASH ref REPR type, not '.$self)
+        unless $self =~ /\=HASH\(0x/;
 
     Hash::Util::lock_hash( %$self );
     return $self;
@@ -33,6 +35,14 @@ __END__
 
     # used exactly as UNIVERSAL::Object is used
     our @ISA = ('UNIVERSAL::Object::Immutable');
+
+=head1 COMPATABILITY NOTE
+
+This class requires Perl 5.8.0 or later, this is because it
+depends on the L<Hash::Util> module, which was first introduced
+in that version of Perl. Since this is an optional component,
+we have not bumped the version requirement for the entire
+distribution, only for this module specifically.
 
 =head1 DESCRIPTION
 
