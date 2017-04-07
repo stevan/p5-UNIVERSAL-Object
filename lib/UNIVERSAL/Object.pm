@@ -8,7 +8,7 @@ use 5.006;
 
 use Carp ();
 
-our $VERSION   = '0.07';
+our $VERSION   = '0.08';
 our $AUTHORITY = 'cpan:STEVAN';
 
 BEGIN {

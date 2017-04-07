@@ -1,5 +1,5 @@
 package UNIVERSAL::Object::Immutable;
-# ABSTRACT: A useful base class
+# ABSTRACT: Another useful base class
 
 use strict;
 use warnings;
@@ -10,7 +10,7 @@ use Carp       ();
 use Hash::Util ();
 use UNIVERSAL::Object;
 
-our $VERSION   = '0.07';
+our $VERSION   = '0.08';
 our $AUTHORITY = 'cpan:STEVAN';
 
 our @ISA; BEGIN { @ISA = ('UNIVERSAL::Object') }
@@ -31,18 +31,10 @@ __END__
 
 =pod
 
-=head1 SYNPOSIS
+=head1 SYNOPSIS
 
     # used exactly as UNIVERSAL::Object is used
     our @ISA = ('UNIVERSAL::Object::Immutable');
-
-=head1 COMPATABILITY NOTE
-
-This class requires Perl 5.8.0 or later, this is because it
-depends on the L<Hash::Util> module, which was first introduced
-in that version of Perl. Since this is an optional component,
-we have not bumped the version requirement for the entire
-distribution, only for this module specifically.
 
 =head1 DESCRIPTION
 
@@ -54,7 +46,7 @@ created will be immutable.
 
 Immutable data structures are unable to be changed after they are
 created. By placing and enforcing the guarantee of immutability,
-the users of our class no longer need to worry about a while class
+the users of our class no longer need to worry about a whole class
 of problems that arise from mutable state.
 
 =head2 Immutability is semi-viral
@@ -127,7 +119,7 @@ we can be sure that the expected version of C<BLESS> is used.
 
 =item Role Composition
 
-Using the role compositon facilities in the L<MOP> package will result
+Using the role composition facilities in the L<MOP> package will result
 in C<BLESS> being aliased into the consuming package and therefore have
 the same effect as the multiple inheritance.
 
@@ -136,6 +128,14 @@ the same effect as the multiple inheritance.
     # make sure something performs the role composition ...
 
 =back
+
+=head2 Compatibility Note
+
+This class requires Perl 5.8.0 or later, this is because it
+depends on the L<Hash::Util> module, which was first introduced
+in that version of Perl. Since this is an optional component,
+we have not bumped the version requirement for the entire
+distribution, only for this module specifically.
 
 =cut
 
