@@ -169,7 +169,7 @@ while still being complete.
 
 One of the key contributions of this module is to provide a
 mechanism for declaring the slots that a given class is expected
-to have. These are used in the object contruction process to ensure
+to have. These are used in the object construction process to ensure
 that all slots are created and initialized.
 
 =head2 C<%HAS>
@@ -232,7 +232,7 @@ should always be a fully constructed and initialized instance.
 This method takes the original C<@args> to the C<new> constructor
 and is expected to turn them into a canonical form, which is a
 HASH ref of name/value pairs. This form is considered a prototype
-candidate for the instance, and what C<BLESS> and suseqently
+candidate for the instance, and what C<BLESS> and subsequently
 C<CREATE> expect to receive.
 
 B<NOTE:>
@@ -281,15 +281,15 @@ The newly blessed instance supplied by C<BLESS> must still be
 initialized. We do this by calling all the available C<BUILD> methods
 in the inheritance hierarchy in the correct (reverse mro) order.
 
-C<BUILD> is an optional initialization method which recieves the
+C<BUILD> is an optional initialization method which receives the
 blessed instance as well as the prototype candidate. There are no
-restirctions as to what this method can do other then just common
+restrictions as to what this method can do other then just common
 sense.
 
 B<NOTE:>
 It is worth noting that because we call all the C<BUILD> methods
 found in the object hierarchy, the return values of these methods
-are completly ignored.
+are completely ignored.
 
 =head1 DESTRUCTION PROTOCOL
 
