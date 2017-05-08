@@ -24,7 +24,7 @@ sub BLESS {
     elsif ( $self =~ /\=ARRAY\(0x/ ) {
         Internals::SvREADONLY( @$self, 1 );
     }
-    elsif ( $self =~ /\=SCALAR\(0x/ ) {
+    elsif ( $self =~ /\=SCALAR\(0x/ or $self =~ /\=REF\(0x/ ) {
         Internals::SvREADONLY( $$self, 1 );
     }
     else {
@@ -54,8 +54,9 @@ created will be immutable.
 =head2 Supported REPR types
 
 This module will attempt to do the right type of locking for
-the three main instance types; C<SCALAR>, C<ARRAY> and C<HASH>,
-and all other instance types are unsupported.
+the three main instance types; C<SCALAR>, C<REF>, C<ARRAY> and
+C<HASH>, all other instance types are unsupported and will
+throw an error.
 
 =head2 Why Immutability?
 

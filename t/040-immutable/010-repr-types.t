@@ -61,3 +61,29 @@ BEGIN {
     like($@, qr/^Modification of a read-only value attempted/, '... got the expected error');
 }
 
+{
+    {
+        package My::RefInstance::Test;
+
+        use strict;
+        use warnings;
+
+        our @ISA; BEGIN { @ISA = ('UNIVERSAL::Object::Immutable') }
+
+        sub REPR   { \(my $r = []) }
+        sub CREATE { $_[0]->REPR }
+    }
+
+    my $instance;
+
+    $@ = undef;
+    eval { $instance = My::RefInstance::Test->new };
+    ok(!$@, '... got lack of error');
+
+    isa_ok($instance, 'My::RefInstance::Test');
+
+    $@ = undef;
+    eval { $$instance = {} };
+    like($@, qr/^Modification of a read-only value attempted/, '... got the expected error');
+}
+
