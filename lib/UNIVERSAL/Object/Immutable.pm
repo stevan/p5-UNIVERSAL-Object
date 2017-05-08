@@ -7,7 +7,6 @@ use warnings;
 use 5.008;
 
 use Carp       ();
-use Hash::Util ();
 use UNIVERSAL::Object;
 
 our $VERSION   = '0.08';
@@ -18,10 +17,20 @@ our @ISA; BEGIN { @ISA = ('UNIVERSAL::Object') }
 sub BLESS {
     my $self = $_[0]->SUPER::BLESS( $_[1] );
 
-    Carp::croak('Immutable objects must use a HASH ref REPR type, not '.$self)
-        unless $self =~ /\=HASH\(0x/;
+    if ( $self =~ /\=HASH\(0x/ ) {
+        require Hash::Util;
+        Hash::Util::lock_hash( $self );
+    }
+    elsif ( $self =~ /\=ARRAY\(0x/ ) {
+        Internals::SvREADONLY( @$self, 1 );
+    }
+    elsif ( $self =~ /\=SCALAR\(0x/ ) {
+        Internals::SvREADONLY( $$self, 1 );
+    }
+    else {
+        Carp::croak('Unsupported REPR type: '.$self);
+    }
 
-    Hash::Util::lock_hash( %$self );
     return $self;
 }
 
@@ -41,6 +50,12 @@ __END__
 You can use this class in the same manner that you would use
 L<UNIVERSAL::Object>, the only difference is that the instances
 created will be immutable.
+
+=head2 Supported REPR types
+
+This module will attempt to do the right type of locking for
+the three main instance types; C<SCALAR>, C<ARRAY> and C<HASH>,
+and all other instance types are unsupported.
 
 =head2 Why Immutability?
 
@@ -132,10 +147,11 @@ the same effect as the multiple inheritance.
 =head2 Compatibility Note
 
 This class requires Perl 5.8.0 or later, this is because it
-depends on the L<Hash::Util> module, which was first introduced
-in that version of Perl. Since this is an optional component,
-we have not bumped the version requirement for the entire
-distribution, only for this module specifically.
+depends on the L<Hash::Util> module and the C<Internals::SvREADONLY>
+feature, both of which were first introduced in that version of Perl.
+Since this is an optional component, we have not bumped the version
+requirement for the entire distribution, only for this module
+specifically.
 
 =cut
 

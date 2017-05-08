@@ -1,5 +1,11 @@
 Revision history for Perl extension UNIVERSAL::Object
 
+0.09
+    - add support to UNIVERSAL::Object::Immutable
+      to handle additional REPR types
+        - handles SCALAR, ARRAY and HASH
+        - added tests for this
+
 0.08 2017-04-07
     - fixing spelling mistakes and bad POD formatting
 

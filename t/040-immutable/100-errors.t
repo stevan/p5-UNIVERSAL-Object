@@ -18,10 +18,10 @@ BEGIN {
 
         our @ISA; BEGIN { @ISA = ('UNIVERSAL::Object::Immutable') }
 
-        sub REPR   { +[] }
+        sub REPR   { qr// }
         sub CREATE { $_[0]->REPR }
     }
 
     eval { This::Will::Not::Work->new };
-    like($@, qr/^Immutable objects must use a HASH ref REPR type\, not This\:\:Will\:\:Not\:\:Work\=ARRAY\(0x/, '... got the expected error');
+    like($@, qr/^Unsupported REPR type:\ \(\?\^\:\)/, '... got the expected error');
 }
