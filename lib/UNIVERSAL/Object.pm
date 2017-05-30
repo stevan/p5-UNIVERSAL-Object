@@ -114,6 +114,7 @@ __END__
     package Person;
     use strict;
     use warnings;
+    use UNIVERSAL::Object;
 
     our @ISA = ('UNIVERSAL::Object');
     our %HAS = (
@@ -143,20 +144,20 @@ __END__
     # ...
 
     my $ceo = Employee->new(
-        name  => 'Alice',
-        title => 'CEO',
+        name      => 'Alice',
+        job_title => 'CEO',
     );
 
     my $manager = Employee->new(
-        name    => 'Bob',
-        title   => 'Middle Manager',
-        manager => $ceo,
+        name      => 'Bob',
+        job_title => 'Middle Manager',
+        manager   => $ceo,
     );
 
     my $pawn = Employee->new(
-        name    => 'Joe',
-        title   => 'Line Worker',
-        manager => $manager,
+        name      => 'Joe',
+        job_title => 'Line Worker',
+        manager   => $manager,
     );
 
 =head1 DESCRIPTION
