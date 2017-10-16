@@ -12,8 +12,12 @@ our $VERSION   = '0.11';
 our $AUTHORITY = 'cpan:STEVAN';
 
 BEGIN {
-    eval('use ' . ($] >= 5.010 ? 'mro' : 'MRO::Compat'));
-    Carp::croak($@) if $@;
+    if ($] >= 5.010) {
+        require mro;
+    }
+    else {
+        require MRO::Compat;
+    }
 }
 
 sub new {
