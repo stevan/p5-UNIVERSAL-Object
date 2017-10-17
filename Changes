@@ -1,6 +1,6 @@
 Revision history for Perl extension UNIVERSAL::Object
 
-0.12
+0.12 2017-10-18
     - UNIVERSAL::Object::Immutable now allows for
       alteration of the instance during `BUILD` by
       delaying locking of the instance until the
