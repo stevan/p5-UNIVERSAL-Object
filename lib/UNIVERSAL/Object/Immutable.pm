@@ -58,6 +58,15 @@ You can use this class in the same manner that you would use
 L<UNIVERSAL::Object>, the only difference is that the instances
 created will be immutable.
 
+=head2 When are thing made Immutable?
+
+Obviously we need to create and initialize the instance before
+we make it immutable, it is only after that when we want it to be
+immutable. This means that if you need to munge values, or build
+values based on the contents of other slots, you should do this
+inside a C<BUILD> method, during which the instance will still be
+mutable.
+
 =head2 Supported REPR types
 
 This module will attempt to do the right type of locking for
