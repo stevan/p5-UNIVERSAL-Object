@@ -1,6 +1,6 @@
 Revision history for Perl extension UNIVERSAL::Object
 
-0.13
+0.13 2017-10-30
     - switched back to Carp::confess from Carp::cluck, the
       stack trace is vital until this module matures and
       the error messages improve
