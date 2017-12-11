@@ -11,10 +11,7 @@ use Carp ();
 our $VERSION   = '0.13';
 our $AUTHORITY = 'cpan:STEVAN';
 
-BEGIN {
-    eval('use ' . ($] >= 5.010 ? 'mro' : 'MRO::Compat'));
-    Carp::confess($@) if $@;
-}
+BEGIN { $] >= 5.010 ? require mro : require MRO::Compat }
 
 sub new {
     my $class = shift;
