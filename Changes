@@ -1,5 +1,11 @@
 Revision history for Perl extension UNIVERSAL::Object
 
+0.14
+    - slots are now sorted by name before we attempt to
+      populate the instance, this should make some errors
+      more predictable
+        - thanks to Tony Inkster for this
+
 0.13 2017-10-30
     - switched back to Carp::confess from Carp::cluck, the
       stack trace is vital until this module matures and

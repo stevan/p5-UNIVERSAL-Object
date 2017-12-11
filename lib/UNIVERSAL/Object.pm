@@ -61,7 +61,7 @@ sub CREATE {
     $self->{ $_ } = exists $proto->{ $_ }
         ? $proto->{ $_ }
         : $slots{ $_ }->( $self, $proto )
-            foreach keys %slots;
+            foreach sort keys %slots;
 
     return $self;
 }
