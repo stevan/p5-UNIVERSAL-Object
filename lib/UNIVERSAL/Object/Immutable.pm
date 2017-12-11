@@ -11,7 +11,7 @@ use Scalar::Util ();
 
 use UNIVERSAL::Object;
 
-our $VERSION   = '0.13';
+our $VERSION   = '0.14';
 our $AUTHORITY = 'cpan:STEVAN';
 
 our @ISA; BEGIN { @ISA = ('UNIVERSAL::Object') }
