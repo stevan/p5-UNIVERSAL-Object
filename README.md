@@ -1,10 +1,9 @@
 # UNIVERSAL::Object
 
-[![Build Status](https://travis-ci.org/stevan/p5-UNIVERSAL-Object.svg?branch=master)](https://travis-ci.org/stevan/p5-UNIVERSAL-Object)
-
 A useful base class
 
 [![CPAN version](https://badge.fury.io/pl/UNIVERSAL-Object.svg)](https://metacpan.org/pod/UNIVERSAL-Object)
+[![Build Status](https://travis-ci.org/stevan/p5-UNIVERSAL-Object.svg?branch=master)](https://travis-ci.org/stevan/p5-UNIVERSAL-Object)
 
 # Copyright and License
 
