@@ -6,8 +6,7 @@ use warnings;
 
 use 5.008;
 
-use Carp         ();
-use Scalar::Util ();
+use Carp ();
 
 use UNIVERSAL::Object;
 
@@ -19,23 +18,23 @@ our @ISA; BEGIN { @ISA = ('UNIVERSAL::Object') }
 sub new {
     my $class = shift;
     my $self  = $class->SUPER::new( @_ );
-    my $type  = Scalar::Util::reftype( $self );
 
-    if ( $type eq 'HASH' ) {
+    if ( $self =~ /\=HASH\(0x/ ) {
         require Hash::Util;
         Hash::Util::lock_hash( $self );
     }
-    elsif ( $type eq 'ARRAY' ) {
+    elsif ( $self =~ /\=ARRAY\(0x/ ) {
         Internals::SvREADONLY( @$self, 1 );
     }
-    elsif ( $type eq 'SCALAR' or $type eq 'REF' ) {
+    elsif ( $self =~ /\=SCALAR\(0x/ or $self =~ /\=REF\(0x/ ) {
         Internals::SvREADONLY( $$self, 1 );
     }
-    elsif ( $type eq 'CODE' ) {
+    elsif ( $self =~ /\=CODE\(0x/ ) {
         # NOTE: do nothing here, because – ignoring
         # closures – CODE refs are immutable anyway
     }
     else {
+        require Scalar::Util;
         Carp::confess('Invalid BLESS args for '.Scalar::Util::blessed($self).', unsupported REPR type ('.Scalar::Util::reftype($self).')');
     }
 
