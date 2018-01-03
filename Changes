@@ -7,9 +7,6 @@ Revision history for Perl extension UNIVERSAL::Object
       populate the instance, this should make some errors
       more predictable
         - thanks to Tony Inkster for this
-    - Checking reftype in U::O::Immutable instead of doing
-      a string match
-        - thanks to Tony Inkster for this too
     - Avoid the stringy eval stuff around mro/MRO::Compat
         - thanks to Graham Knopp for this
 
