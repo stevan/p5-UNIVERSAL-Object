@@ -3,6 +3,10 @@ Revision history for Perl extension UNIVERSAL::Object
 0.14
     - adding in Travis CI integration
         - thanks to JJ Merelo for this
+    - slots are now sorted by name before we attempt to
+      populate the instance, this should make some errors
+      more predictable
+        - thanks to Tony Inkster for this
     - Checking reftype in U::O::Immutable instead of doing
       a string match
         - thanks to Tony Inkster for this too
