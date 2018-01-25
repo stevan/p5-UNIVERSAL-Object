@@ -1,6 +1,6 @@
 Revision history for Perl extension UNIVERSAL::Object
 
-0.14
+0.14 2018-01-25
     - adding in Travis CI integration
         - thanks to JJ Merelo for this
     - slots are now sorted by name before we attempt to
