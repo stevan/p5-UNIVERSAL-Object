@@ -8,7 +8,7 @@ use 5.006;
 
 use Carp ();
 
-our $VERSION   = '0.14';
+our $VERSION   = '0.15';
 our $AUTHORITY = 'cpan:STEVAN';
 
 BEGIN { $] >= 5.010 ? require mro : require MRO::Compat }
