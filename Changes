@@ -1,5 +1,8 @@
 Revision history for Perl extension UNIVERSAL::Object
 
+0.15
+    - improve some error messages
+
 0.14 2018-01-25
     - adding in Travis CI integration
         - thanks to JJ Merelo for this

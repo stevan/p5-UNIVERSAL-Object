@@ -19,10 +19,13 @@ sub new {
 
     my $proto = $class->BUILDARGS( @_ );
 
-    Carp::confess('BUILDARGS must return a HASH reference, not '.ref $proto)
+    Carp::confess('BUILDARGS must return a HASH reference, not '.$proto)
         unless $proto && ref $proto eq 'HASH';
 
     my $self = $class->BLESS( $proto );
+
+    Carp::confess('BLESS must return a blessed reference, not '.$self)
+        unless defined $self && UNIVERSAL::isa( $self, 'UNIVERSAL' );
 
     $self->can('BUILD') && UNIVERSAL::Object::Util::BUILDALL( $self, $proto );
 
@@ -49,9 +52,14 @@ sub BLESS {
     my $proto = $_[1];
 
     Carp::confess('Invalid BLESS args for '.$class.', You must specify an instance prototype as a HASH ref')
-        unless $proto && ref $proto eq 'HASH';
+        unless defined $proto && ref $proto eq 'HASH';
 
-    return bless $class->CREATE( $proto ) => $class;
+    my $instance = $class->CREATE( $proto );
+
+    Carp::confess('CREATE must return a reference to bless, not '.$instance)
+        unless defined $instance && ref $instance;
+
+    return bless $instance => $class;
 }
 
 sub CREATE {
@@ -61,6 +69,12 @@ sub CREATE {
 
     my $self  = $class->REPR( $proto );
     my %slots = $class->SLOTS;
+
+    # NOTE:
+    # We could check the return values of SLOTS
+    # and REPR, but they might change and so it
+    # is not something we would always know.
+    # - SL
 
     $self->{ $_ } = exists $proto->{ $_ }
         ? $proto->{ $_ }
