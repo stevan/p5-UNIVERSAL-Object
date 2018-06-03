@@ -16,9 +16,16 @@ BEGIN { $] >= 5.010 ? require mro : require MRO::Compat }
 sub new {
     my $class = shift;
        $class = ref $class if ref $class;
+
     my $proto = $class->BUILDARGS( @_ );
-    my $self  = $class->BLESS( $proto );
+
+    Carp::confess('BUILDARGS must return a HASH reference, not '.ref $proto)
+        unless $proto && ref $proto eq 'HASH';
+
+    my $self = $class->BLESS( $proto );
+
     $self->can('BUILD') && UNIVERSAL::Object::Util::BUILDALL( $self, $proto );
+
     return $self;
 }
 
