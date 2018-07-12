@@ -58,7 +58,7 @@ You can use this class in the same manner that you would use
 L<UNIVERSAL::Object>, the only difference is that the instances
 created will be immutable.
 
-=head2 When are thing made Immutable?
+=head2 When are instances made Immutable?
 
 Obviously we need to create and initialize the instance before
 we make it immutable, it is only after that when we want it to be
@@ -160,7 +160,7 @@ the same effect as the multiple inheritance.
 
     our @ISA  = ('My::Super::Class');
     our @DOES = ('UNIVERSAL::Object::Immutable');
-    # make sure something performs the role composition ...
+    # MOP::Util can be used to performs the role composition
 
 =back
 
