@@ -6,7 +6,8 @@ use warnings;
 
 use 5.008;
 
-use Carp ();
+use Carp     ();
+use overload ();
 
 use UNIVERSAL::Object;
 
@@ -18,18 +19,19 @@ our @ISA; BEGIN { @ISA = ('UNIVERSAL::Object') }
 sub new {
     my $class = shift;
     my $self  = $class->SUPER::new( @_ );
+    my $repr  = overload::StrVal($self);
 
-    if ( $self =~ /\=HASH\(0x/ ) {
+    if ( $repr =~ /\=HASH\(0x/ ) {
         require Hash::Util;
         Hash::Util::lock_hash( $self );
     }
-    elsif ( $self =~ /\=ARRAY\(0x/ ) {
+    elsif ( $repr =~ /\=ARRAY\(0x/ ) {
         Internals::SvREADONLY( @$self, 1 );
     }
-    elsif ( $self =~ /\=SCALAR\(0x/ or $self =~ /\=REF\(0x/ ) {
+    elsif ( $repr =~ /\=SCALAR\(0x/ or $repr =~ /\=REF\(0x/ ) {
         Internals::SvREADONLY( $$self, 1 );
     }
-    elsif ( $self =~ /\=CODE\(0x/ ) {
+    elsif ( $repr =~ /\=CODE\(0x/ ) {
         # NOTE: do nothing here, because – ignoring
         # closures – CODE refs are immutable anyway
     }
