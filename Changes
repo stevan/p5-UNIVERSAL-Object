@@ -2,6 +2,9 @@ Revision history for Perl extension UNIVERSAL::Object
 
 0.15
     - improve some error messages
+    - Immutable objects now correctly work with overloaded
+      objects by accessing the overload::StrVal instead of
+      the overloaded string
 
 0.14 2018-01-25
     - adding in Travis CI integration
