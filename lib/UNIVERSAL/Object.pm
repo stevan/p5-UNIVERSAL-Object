@@ -4,7 +4,7 @@ package UNIVERSAL::Object;
 use strict;
 use warnings;
 
-use 5.006;
+use 5.008;
 
 use Carp ();
 
@@ -59,7 +59,21 @@ sub BLESS {
     Carp::confess('CREATE must return a reference to bless, not '.$instance)
         unless defined $instance && ref $instance;
 
-    return bless $instance => $class;
+    my $repr = ref   $instance;
+    my $self = bless $instance => $class;
+
+    # So,... for HASH based instances we'll
+    # lock the set of keys so as to prevent
+    # typos and other such silliness, if
+    # you use other $repr types, you are
+    # on your own, ... sorry ¯\_(ツ)_/¯
+    if ( $repr eq 'HASH' ) {
+        require Hash::Util;
+        my %slots = $self->SLOTS;
+        Hash::Util::lock_keys( $self, keys %slots );
+    }
+
+    return $self;
 }
 
 sub CREATE {
