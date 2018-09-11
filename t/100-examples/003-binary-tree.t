@@ -80,6 +80,7 @@ Make the parent a weak-ref ... it is not right now.
     use warnings;
 
     our @ISA; BEGIN { @ISA = ('BinaryTree') }
+    our %HAS; BEGIN { %HAS = (%BinaryTree::HAS) }
 }
 
 {
