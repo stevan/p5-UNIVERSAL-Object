@@ -283,11 +283,17 @@ C<CREATE>, passing it the C<$proto> instance. Then it will take
 the return value of C<CREATE> and C<bless> it into the C<$class>.
 
 B<NOTE:>
-This method is mostly here to make it easier to override the
-C<CREATE> method, which, along with the C<REPR> method, can be
-used to change the behavior and/or type of the instance
-structure. By keeping the C<bless> work here we make the work
-done in C<CREATE> simpler with less mechanics.
+This method will, if the C<REPR> type is a C<HASH> reference,
+proceed to lock the set of allowed keys in the C<HASH>. Things
+should "Just Work" as long as you do not attempt to access a
+slot that you have not defined.
+
+B<NOTE:>
+Aside from the above, this method is mostly here to make it
+easier to override the C<CREATE> method, which, along with the
+C<REPR> method, can be used to change the behavior and/or type
+of the instance structure. By keeping the C<bless> work here we
+make the work done in C<CREATE> simpler with less mechanics.
 
 =head2 C<CREATE ($class, $proto)>
 
