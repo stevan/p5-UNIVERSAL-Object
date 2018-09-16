@@ -1,13 +1,13 @@
 package UNIVERSAL::Object::Immutable;
 # ABSTRACT: Another useful base class
-
+use 5.008;
 use strict;
 use warnings;
 
-use 5.008;
-
-use Carp     ();
-use overload ();
+use Carp         ();
+use overload     ();
+use Hash::Util   ();
+use Scalar::Util ();
 
 use UNIVERSAL::Object;
 
@@ -22,8 +22,7 @@ sub new {
     my $repr  = overload::StrVal($self);
 
     if ( $repr =~ /\=HASH\(0x/ ) {
-        require Hash::Util;
-        Hash::Util::lock_hash( $self );
+        Hash::Util::lock_hash( %$self );
     }
     elsif ( $repr =~ /\=ARRAY\(0x/ ) {
         Internals::SvREADONLY( @$self, 1 );
@@ -36,7 +35,6 @@ sub new {
         # closures – CODE refs are immutable anyway
     }
     else {
-        require Scalar::Util;
         Carp::confess('Invalid BLESS args for '.Scalar::Util::blessed($self).', unsupported REPR type ('.Scalar::Util::reftype($self).')');
     }
 

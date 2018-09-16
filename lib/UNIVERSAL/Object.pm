@@ -1,12 +1,11 @@
 package UNIVERSAL::Object;
 # ABSTRACT: A useful base class
-
+use 5.008;
 use strict;
 use warnings;
 
-use 5.008;
-
-use Carp ();
+use Carp       ();
+use Hash::Util ();
 
 our $VERSION   = '0.15';
 our $AUTHORITY = 'cpan:STEVAN';
@@ -68,9 +67,8 @@ sub BLESS {
     # you use other $repr types, you are
     # on your own, ... sorry ¯\_(ツ)_/¯
     if ( $repr eq 'HASH' ) {
-        require Hash::Util;
         my %slots = $self->SLOTS;
-        Hash::Util::lock_keys( $self, keys %slots );
+        Hash::Util::lock_keys( %$self, keys %slots );
     }
 
     return $self;
