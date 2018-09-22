@@ -27,7 +27,7 @@ sub new {
     elsif ( $repr =~ /\=ARRAY\(0x/ ) {
         Internals::SvREADONLY( @$self, 1 );
     }
-    elsif ( $repr =~ /\=SCALAR\(0x/ or $repr =~ /\=REF\(0x/ ) {
+    elsif ( $repr =~ /\=SCALAR\(0x/ or $repr =~ /\=REF\(0x/ or $repr =~ /\=REGEXP\(0x/ ) {
         Internals::SvREADONLY( $$self, 1 );
     }
     elsif ( $repr =~ /\=CODE\(0x/ ) {
