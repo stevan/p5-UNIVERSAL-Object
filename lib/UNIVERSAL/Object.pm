@@ -7,7 +7,7 @@ use warnings;
 use Carp       ();
 use Hash::Util ();
 
-our $VERSION   = '0.15';
+our $VERSION   = '0.16';
 our $AUTHORITY = 'cpan:STEVAN';
 
 BEGIN { $] >= 5.010 ? require mro : require MRO::Compat }
