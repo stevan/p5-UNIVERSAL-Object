@@ -213,7 +213,7 @@ a default value for the slot.
 B<NOTE:>
 No inheritance of slot definitions is done between classes, this is
 left as an exercise to the author, however it is easily accomplished
-with the pattern shown above in the L<SYNOPSIS>.
+with the pattern shown above in the L</SYNOPSIS>.
 
 =head2 C<SLOTS ($class)>
 
